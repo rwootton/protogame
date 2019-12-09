@@ -26,9 +26,9 @@ const usePlayer = (scene) => {
     }
 
     return ()=>{
-      if(loader) loader.dispose();
-      if(player) player.dispose();
-      if(mixer) player.dispose();
+      if(loader && loader.dispose) loader.dispose();
+      if(player && player.dipose) player.dispose();
+      if(mixer && mixer.dispose) mixer.dispose();
     }
   }, [scene])
 
