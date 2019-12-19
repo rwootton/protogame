@@ -5,7 +5,7 @@ const speed = 4;
 const xConstraint = 100000;
 const yConstraint = 100000;
 
-const UserController = ({userObject, children, moveAnimation}) => {
+const UserController = ({userObject, camera, children, moveAnimation}) => {
   const inputDiv = React.createRef();
 
   useEffect(()=>{
@@ -19,16 +19,18 @@ const UserController = ({userObject, children, moveAnimation}) => {
     var animate = false;
     if(ySpeed) { 
       userObject.position['z'] -= ySpeed;
+      camera.position['z'] -= ySpeed;
       if(Math.abs(userObject.position.y) < yConstraint) animate = true;
     }
     if(xSpeed) {
       userObject.position['x'] += xSpeed;
+      camera.position['x'] += xSpeed;
       if(Math.abs(userObject.position.x) < xConstraint) animate = true;
     }
 
     if(animate) {
       moveAnimation();
-      userObject.rotation.z = Math.atan2(xSpeed, -ySpeed);
+      userObject.rotation.y = Math.atan2(xSpeed, -ySpeed);
       requestAnimationFrame(moveLoop)
     }
   }
@@ -39,10 +41,10 @@ const UserController = ({userObject, children, moveAnimation}) => {
     }
     const moving = ySpeed || xSpeed;
     if(key.toLowerCase() === "w") {
-      ySpeed = speed/2;
+      ySpeed = speed;
     }
     if(key.toLowerCase() === "s") {
-      ySpeed = -speed/2;
+      ySpeed = -speed;
     }
     if(key.toLowerCase() === "a") {
       xSpeed = -speed;
