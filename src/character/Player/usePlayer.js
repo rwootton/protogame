@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import { AnimationMixer } from 'three';
+import { AnimationMixer, MeshToonMaterial, Mesh } from 'three';
 import useAsset from '../../common/useAsset';
 
 const file = 'assets/lofi-polly.glb';
@@ -9,21 +9,27 @@ const usePlayer = (scene) => {
   const [player, setPlayer] = useState(null);
   const [mixer, setMixer] = useState(null);
 
-  useEffect(()=>{
-    if(scene && playerFile) {
-        const object = playerFile.scene;
-        const animations = playerFile.animations;
-        const mixer = new AnimationMixer(object)
-        setMixer(mixer);
-        const action = mixer.clipAction(animations[0]);
+  useEffect(() => {
+    if (scene && playerFile) {
+      const material = new MeshToonMaterial({color: '#b384fa'})
+      const object = playerFile.scene;
+      object.traverse((child)=>{
+        if(child instanceof Mesh) {
+          child.material = material;
+        }
+      })
+      const animations = playerFile.animations;
+      const mixer = new AnimationMixer(object)
+      setMixer(mixer);
+      const action = mixer.clipAction(animations[0]);
 
-        action.play();
-        object.position.z = -460;
-        object.scale.z = 50;
-        object.scale.y = 50;
-        object.scale.x = 50;
-        setPlayer(object)
-        scene.add(object);
+      action.play();
+      object.position.z = -460;
+      object.scale.z = 50;
+      object.scale.y = 50;
+      object.scale.x = 50;
+      setPlayer(object)
+      scene.add(object);
     }
 
     return ()=>{

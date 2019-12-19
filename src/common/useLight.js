@@ -6,8 +6,8 @@ const useLight = (scene) => {
 
   useEffect(()=>{
     if(!scene) return;
-    const newLight = new PointLight('#c9c9c9', 0.7, 0);
-    const otherLight = new AmbientLight('#c9c9c9', 0.9);
+    const newLight = new PointLight(null, 0.7, 0);
+    const otherLight = new AmbientLight(null, 0.6);
     newLight.position.y = 600;
     otherLight.position.y = 1000;
     otherLight.rotation.x = 1.8*Math.PI;

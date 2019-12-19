@@ -9,10 +9,10 @@ import usePlayer from '../character/Player/usePlayer';
 import UserController from './UserController';
 import useLight from './useLight';
 import useTree from './useTree';
-import useGrass from './useGrass';
 import useGround from './useGround';
+import Field from './Field'
 
-const World = ({ height, width, children }) => {
+const World = ({ height, width }) => {
   const mountPoint = React.createRef();
 
   const [scene, setScene] = useState(null);
@@ -24,8 +24,6 @@ const World = ({ height, width, children }) => {
   useLight(scene);
   useTree(scene);
   useGround(scene);
-  useGrass(scene);
-
 
   const animate = () => {
     requestAnimationFrame(animate);
@@ -62,11 +60,22 @@ const World = ({ height, width, children }) => {
 
   }, [mixer]);
 
-  return <UserController userObject={player} camera={camera} moveAnimation={()=>{mixer.update(clock.getDelta())}}>
-    <div ref={mountPoint} style={{ width, height }}>
-      {children}
-    </div>
-  </UserController>
+  return (
+    <UserController
+      userObject={player}
+      camera={camera}
+      moveAnimation={() => { mixer.update(clock.getDelta()) }}>
+      <div ref={mountPoint} style={{ width, height }}>
+        <Field
+          scene={scene}
+          diameter={1000}
+          max={200}
+          min={100}
+          startPosition={{ x: -200, z: -600 }}
+        />
+      </div>
+    </UserController>
+  )
 }
 
 export default World;
