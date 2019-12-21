@@ -5,7 +5,7 @@ const speed = 4;
 const xConstraint = 100000;
 const yConstraint = 100000;
 
-const UserController = ({userObject, camera, children, moveAnimation}) => {
+const UserController = ({userObject, camera, children, walkAction}) => {
   const inputDiv = React.createRef();
 
   useEffect(()=>{
@@ -29,9 +29,12 @@ const UserController = ({userObject, camera, children, moveAnimation}) => {
     }
 
     if(animate) {
-      moveAnimation();
+      walkAction.play();
       userObject.rotation.y = Math.atan2(xSpeed, -ySpeed);
       requestAnimationFrame(moveLoop)
+    }
+    else {
+      walkAction.stop(1);
     }
   }
 

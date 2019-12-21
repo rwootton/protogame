@@ -7,10 +7,10 @@ import {
 } from 'three';
 import usePlayer from '../character/Player/usePlayer';
 import UserController from './UserController';
-import useLight from './useLight';
-import useTree from './useTree';
-import useGround from './useGround';
+import Light from './Light';
+import Tree from './Tree';
 import Field from './Field'
+import Ground from './Ground'
 
 const World = ({ height, width }) => {
   const mountPoint = React.createRef();
@@ -20,10 +20,7 @@ const World = ({ height, width }) => {
   const [renderer, setRenderer] = useState(null);
   const [clock, setClock] = useState(null);
 
-  const [player, mixer] = usePlayer(scene);
-  useLight(scene);
-  useTree(scene);
-  useGround(scene);
+  const [player, mixer, walkAction] = usePlayer(scene);
 
   const animate = () => {
     requestAnimationFrame(animate);
@@ -63,14 +60,17 @@ const World = ({ height, width }) => {
   return (
     <UserController
       userObject={player}
-      camera={camera}
-      moveAnimation={() => { mixer.update(clock.getDelta()) }}>
+      walkAction={walkAction}
+      mixer={mixer}
+      camera={camera}>
       <div ref={mountPoint} style={{ width, height }}>
+        <Tree scene={scene} />
+        <Ground scene={scene} />
+        <Light scene={scene} />
         <Field
           scene={scene}
-          diameter={1000}
-          max={200}
-          min={100}
+          diameter={600}
+          count={1000}
           startPosition={{ x: -200, z: -600 }}
         />
       </div>

@@ -4,12 +4,12 @@ import useAsset from './useAsset';
 
 const SCALE = 80;
 
-const Grass = ({scene, position, rotation}) => {
+const Grass = ({scene, position, rotation, color}) => {
   const grassAsset = useAsset({file: 'assets/squishgrass.glb'});
 
   useEffect(()=>{
     if(!grassAsset) return;
-    const material = new MeshToonMaterial({color: '#948ba3'})
+    const material = new MeshToonMaterial({color})
     const object = grassAsset.scene;
     object.traverse((child)=>{
       if(child instanceof Mesh) {

@@ -1,5 +1,5 @@
 
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import useAsset from './useAsset';
 import { MeshToonMaterial, Mesh } from 'three'
 
@@ -7,13 +7,12 @@ const file = 'assets/tree.glb';
 
 const scale = 40;
 
-const useTree = (scene) => {
-  const [tree, setTree] = useState(null);
+const Tree = ({scene}) => {
   const treeFile = useAsset({file});
 
   useEffect(()=>{
     if(scene && treeFile) {
-        const toonMaterial = new MeshToonMaterial({color: '#b2aabf'});
+        const toonMaterial = new MeshToonMaterial({color: '#664d3b'});
         const object = treeFile.scene;
         object.traverse((child)=>{
           if(child instanceof Mesh) {
@@ -27,7 +26,6 @@ const useTree = (scene) => {
         object.scale.z = scale;
         object.scale.y = scale;
         object.scale.x = scale;
-        setTree(object)
         scene.add(object);
     };
 
@@ -36,7 +34,7 @@ const useTree = (scene) => {
     }
   }, [scene, treeFile])
 
-  return tree;
+  return <></>;
 }
 
-export default useTree;
+export default Tree;

@@ -2,32 +2,44 @@ import {useEffect, useState} from 'react';
 import { AnimationMixer, MeshToonMaterial, Mesh } from 'three';
 import useAsset from '../../common/useAsset';
 
-const file = 'assets/lofi-polly.glb';
+const file = 'assets/elf-test.glb';
+const scale = 100;
 
 const usePlayer = (scene) => {
   const playerFile = useAsset({file});
   const [player, setPlayer] = useState(null);
   const [mixer, setMixer] = useState(null);
+  const [walkAction, setWalkAction] = useState(null);
 
   useEffect(() => {
     if (scene && playerFile) {
-      const material = new MeshToonMaterial({color: '#b384fa'})
       const object = playerFile.scene;
       object.traverse((child)=>{
         if(child instanceof Mesh) {
-          child.material = material;
+          const toonMaterial = new MeshToonMaterial({color: '#ebc0ae'})
+          toonMaterial.skinning = true;
+          child.material = toonMaterial;
         }
       })
       const animations = playerFile.animations;
-      const mixer = new AnimationMixer(object)
-      setMixer(mixer);
-      const action = mixer.clipAction(animations[0]);
+      if(animations && animations.length) {
+        const mixer = new AnimationMixer(object)
+        setMixer(mixer);
+        const action = mixer.clipAction(animations.find(({name})=>name === "idle"));
+        const walkAction = mixer.clipAction(animations.find(({name})=>name === "walk"));
+        setWalkAction(walkAction);
 
-      action.play();
+        action.play();
+      }
+      else {
+        console.warn('no animations found for player')
+      }
+
       object.position.z = -460;
-      object.scale.z = 50;
-      object.scale.y = 50;
-      object.scale.x = 50;
+      object.scale.z = scale;
+      object.scale.y = scale;
+      object.scale.x = scale;
+
       setPlayer(object)
       scene.add(object);
     }
@@ -37,7 +49,7 @@ const usePlayer = (scene) => {
     }
   }, [scene, playerFile])
 
-  return [player, mixer];
+  return [player, mixer, walkAction];
 }
 
 export default usePlayer;
