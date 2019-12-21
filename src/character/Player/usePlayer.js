@@ -18,6 +18,7 @@ const usePlayer = (scene) => {
         if(child instanceof Mesh) {
           const toonMaterial = new MeshToonMaterial({color: '#ebc0ae'})
           toonMaterial.skinning = true;
+          child.castShadow = true;
           child.material = toonMaterial;
         }
       })

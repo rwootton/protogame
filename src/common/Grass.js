@@ -13,6 +13,7 @@ const Grass = ({scene, position, rotation, color}) => {
     const object = grassAsset.scene;
     object.traverse((child)=>{
       if(child instanceof Mesh) {
+        child.receiveShadow = true;
         child.material = material;
       }
     })

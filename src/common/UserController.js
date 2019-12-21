@@ -5,7 +5,7 @@ const speed = 4;
 const xConstraint = 100000;
 const yConstraint = 100000;
 
-const UserController = ({userObject, camera, children, walkAction}) => {
+const UserController = ({userObject, camera, children, walkAction, scene}) => {
   const inputDiv = React.createRef();
 
   useEffect(()=>{

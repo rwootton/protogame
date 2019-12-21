@@ -3,7 +3,8 @@ import {
   Scene, 
   WebGLRenderer, 
   PerspectiveCamera, 
-  Clock
+  Clock,
+  PCFSoftShadowMap
 } from 'three';
 import usePlayer from '../character/Player/usePlayer';
 import UserController from './UserController';
@@ -43,6 +44,8 @@ const World = ({ height, width }) => {
 
   useEffect(()=> {
     if(!renderer) return;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
     mountPoint.current.appendChild(renderer.domElement);
     camera.position.z = 800;
     camera.position.y = 1000;
@@ -59,6 +62,7 @@ const World = ({ height, width }) => {
 
   return (
     <UserController
+      scene={scene}
       userObject={player}
       walkAction={walkAction}
       mixer={mixer}

@@ -10,6 +10,7 @@ const Ground = ({scene}) => {
     const plane = new Mesh(geometry, material);
     plane.rotation.x = Math.PI/2;
     plane.position.y = -30;
+    plane.receiveShadow = true;
     scene.add(plane);
   }, [scene]);
 

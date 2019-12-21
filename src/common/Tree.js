@@ -16,6 +16,7 @@ const Tree = ({scene}) => {
         const object = treeFile.scene;
         object.traverse((child)=>{
           if(child instanceof Mesh) {
+            child.castShadow = true;
             child.material = toonMaterial;
           }
         })
