@@ -12,7 +12,7 @@ const Tree = ({scene}) => {
 
   useEffect(()=>{
     if(scene && treeFile) {
-        const toonMaterial = new MeshToonMaterial({color: '#664d3b'});
+        const toonMaterial = new MeshToonMaterial({color: '#7A5340'});
         const object = treeFile.scene;
         object.traverse((child)=>{
           if(child instanceof Mesh) {

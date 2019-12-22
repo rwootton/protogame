@@ -16,7 +16,7 @@ const usePlayer = (scene) => {
       const object = playerFile.scene;
       object.traverse((child)=>{
         if(child instanceof Mesh) {
-          const toonMaterial = new MeshToonMaterial({color: '#ebc0ae'})
+          const toonMaterial = new MeshToonMaterial({color: '#8C8CD0'})
           toonMaterial.skinning = true;
           child.castShadow = true;
           child.material = toonMaterial;
