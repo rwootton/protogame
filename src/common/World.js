@@ -42,8 +42,11 @@ const World = ({ height, width }) => {
   }, [])
 
   useEffect(() => {
-    if(camera) camera.aspect = width / height;
     if(renderer) renderer.setSize(width, height);
+    if(camera) {
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
   }, [width, height])
 
   useEffect(()=> {
@@ -71,7 +74,7 @@ const World = ({ height, width }) => {
       walkAction={walkAction}
       mixer={mixer}
       camera={camera}>
-      <div ref={mountPoint} style={{ width, height }}>
+      <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
         <Tree scene={scene} />
         <Ground scene={scene} />
         <Light scene={scene} />
