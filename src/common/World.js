@@ -12,10 +12,12 @@ import Light from './Light';
 import Tree from './Tree';
 import Field from './Field'
 import Ground from './Ground'
+import CollisionMap from './CollisionMap';
 
 const World = ({ height, width }) => {
   const mountPoint = React.createRef();
 
+  const [collisionMap, setCollisionMap] = useState(null);
   const [scene, setScene] = useState(null);
   const [camera, setCamera] = useState(null);
   const [renderer, setRenderer] = useState(null);
@@ -30,6 +32,7 @@ const World = ({ height, width }) => {
   }
 
   useEffect(()=> {
+    setCollisionMap(new CollisionMap());
     setScene(new Scene());
     setCamera(new PerspectiveCamera(45, width / height, 1, 10000));
     setRenderer(new WebGLRenderer())
@@ -69,18 +72,30 @@ const World = ({ height, width }) => {
 
   return (
     <UserController
+      collisionMap={collisionMap}
       scene={scene}
       userObject={player}
       walkAction={walkAction}
       mixer={mixer}
       camera={camera}>
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
-        <Tree scene={scene} />
+        <Tree 
+          collisionMap={collisionMap}
+          position={{ x: -200, z: -600 }}
+          rotation={{ y: Math.PI/2 + 0.8 }}
+          scene={scene} 
+        />
+        <Tree 
+          collisionMap={collisionMap}
+          position={{ x: -600, z: -900 }}
+          rotation={{ y: Math.PI/2 + 0.4 }}
+          scene={scene} 
+        />
         <Ground scene={scene} />
         <Light scene={scene} />
         <Field
           scene={scene}
-          diameter={600}
+          radius={600}
           count={1000}
           startPosition={{ x: -200, z: -600 }}
         />

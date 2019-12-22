@@ -5,9 +5,16 @@ import { MeshToonMaterial, Mesh } from 'three'
 
 const file = 'assets/tree.glb';
 
-const scale = 40;
+const SCALE = 40;
+const RADIUS = 80;
 
-const Tree = ({scene}) => {
+const Tree = ({
+  scene, 
+  position, 
+  rotation, 
+  color, 
+  collisionMap
+}) => {
   const treeFile = useAsset({file});
 
   useEffect(()=>{
@@ -20,18 +27,26 @@ const Tree = ({scene}) => {
             child.material = toonMaterial;
           }
         })
+        if(position) {
+          if(position.x) object.position.x = position.x;
+          if(position.z) object.position.z = position.z;
+        }
+        if(rotation) {
+          if(rotation.y) object.rotation.y = rotation.y;
+        }
+        if(collisionMap) {
+          collisionMap.add({x: position.x, z: position.z, radius: RADIUS})
+        }
 
-        object.position.z = -600;
-        object.position.x = -200;
-        object.rotation.y = Math.PI/2 + 0.8;
-        object.scale.z = scale;
-        object.scale.y = scale;
-        object.scale.x = scale;
+        object.scale.z = SCALE;
+        object.scale.y = SCALE;
+        object.scale.x = SCALE;
         scene.add(object);
     };
 
     return ()=>{
       if(treeFile && treeFile.dispose) treeFile.dispose();
+      if(collisionMap) collisionMap.remove({x: position.x, z: position.z, radius: RADIUS})
     }
   }, [scene, treeFile])
 

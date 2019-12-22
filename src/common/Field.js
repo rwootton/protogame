@@ -1,12 +1,12 @@
 import React from 'react'
 import Grass from './Grass';
 
-const Field = ({scene, diameter, count, startPosition}) => {
+const Field = ({scene, radius, count, startPosition}) => {
   const colors = ['#b2db9c', '#88a677', '#87c771']
   return <>
     {Array.from(Array(count).keys()).map((index)=>{
-      const zOffset = Math.random()*diameter*2-diameter;
-      const xMax = Math.sqrt(Math.abs(Math.pow(diameter, 2) - Math.pow(zOffset,2)));
+      const zOffset = Math.random()*radius*2-radius;
+      const xMax = Math.sqrt(Math.abs(Math.pow(radius, 2) - Math.pow(zOffset,2)));
       const xOffset = Math.random()*xMax*2-xMax;
 
 

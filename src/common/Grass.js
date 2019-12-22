@@ -21,6 +21,7 @@ const Grass = ({scene, position, rotation, color}) => {
     if(position) {
       if(position.x) object.position.x = position.x;
       if(position.z) object.position.z = position.z;
+      if(position.y) object.position.y = position.y;
     }
     if(rotation) {
       if(rotation.z) object.rotation.z = rotation.z;
