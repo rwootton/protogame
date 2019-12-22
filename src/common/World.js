@@ -29,17 +29,21 @@ const World = ({ height, width }) => {
     if(renderer) renderer.render(scene, camera);
   }
 
-  useEffect(() => {
+  useEffect(()=> {
     setScene(new Scene());
     setCamera(new PerspectiveCamera(45, width / height, 1, 10000));
     setRenderer(new WebGLRenderer())
     setClock(new Clock());
-
     return () => {
       if(mountPoint && mountPoint.current) mountPoint.current.innerHTML = "";
       if(scene) scene.dispose();
       if(renderer) renderer.dispose();
     }
+  }, [])
+
+  useEffect(() => {
+    if(camera) camera.aspect = width / height;
+    if(renderer) renderer.setSize(width, height);
   }, [width, height])
 
   useEffect(()=> {
