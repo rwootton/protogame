@@ -31,8 +31,13 @@ const usePlayer = (scene) => {
             toonMaterial.skinning = true;
             child.material = toonMaterial;
           }
+          else if(child.name === "shirt") {
+            const toonMaterial = new MeshToonMaterial({color: '#30964B'})
+            toonMaterial.skinning = true;
+            child.material = toonMaterial;
+          }
           else {
-            const toonMaterial = new MeshToonMaterial({color: '#8C8CD0'})
+            const toonMaterial = new MeshToonMaterial({color: '#FFAA86'})
             toonMaterial.skinning = true;
             child.castShadow = true;
             child.material = toonMaterial;
