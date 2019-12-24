@@ -7,6 +7,7 @@ import {
   PCFSoftShadowMap
 } from 'three';
 import usePlayer from '../character/Player/usePlayer';
+import Npc from '../character/Npc';
 import UserController from './UserController';
 import Light from './Light';
 import Tree from './Tree';
@@ -79,6 +80,14 @@ const World = ({ height, width }) => {
       mixer={mixer}
       camera={camera}>
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
+        <Npc 
+          position={{ x:-520, z: -800 }}
+          rotation={Math.PI*1.25}
+          color={'#FF5B55'}
+          scene={scene}
+          mixer={mixer}
+          collisionMap={collisionMap}
+        />
         <Tree 
           collisionMap={collisionMap}
           position={{ x: -200, z: -600 }}
@@ -96,8 +105,14 @@ const World = ({ height, width }) => {
         <Field
           scene={scene}
           radius={600}
-          count={1000}
+          count={200}
           startPosition={{ x: -200, z: -600 }}
+        />
+        <Field
+          scene={scene}
+          radius={500}
+          count={100}
+          startPosition={{ x: 600, z: -1300 }}
         />
       </div>
     </UserController>

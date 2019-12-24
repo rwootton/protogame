@@ -16,10 +16,27 @@ const usePlayer = (scene) => {
       const object = playerFile.scene;
       object.traverse((child)=>{
         if(child instanceof Mesh) {
-          const toonMaterial = new MeshToonMaterial({color: '#8C8CD0'})
-          toonMaterial.skinning = true;
-          child.castShadow = true;
-          child.material = toonMaterial;
+          if(child.name === "eyes") {
+            const toonMaterial = new MeshToonMaterial({color: '#FFFFFF'})
+            toonMaterial.skinning = true;
+            child.material = toonMaterial;
+          }
+          else if(child.name === "pupils" || child.name === "eyelash") {
+            const toonMaterial = new MeshToonMaterial({color: '#333333'})
+            toonMaterial.skinning = true;
+            child.material = toonMaterial;
+          }
+          else if(child.name === "hair") {
+            const toonMaterial = new MeshToonMaterial({color: '#FF3A3A'})
+            toonMaterial.skinning = true;
+            child.material = toonMaterial;
+          }
+          else {
+            const toonMaterial = new MeshToonMaterial({color: '#8C8CD0'})
+            toonMaterial.skinning = true;
+            child.castShadow = true;
+            child.material = toonMaterial;
+          }
         }
       })
       const animations = playerFile.animations;
@@ -37,6 +54,7 @@ const usePlayer = (scene) => {
       }
 
       object.position.z = -460;
+      object.position.y = -20;
       object.scale.z = scale;
       object.scale.y = scale;
       object.scale.x = scale;

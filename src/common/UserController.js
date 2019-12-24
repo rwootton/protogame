@@ -17,6 +17,7 @@ const UserController = ({userObject, camera, children, walkAction, collisionMap}
   let xSpeed = 0;
 
   const animate = () => {
+    inputDiv.current.focus();
     if(zSpeed || xSpeed) {
       walkAction.play();
       userObject.rotation.y = Math.atan2(xSpeed, zSpeed);
@@ -30,10 +31,10 @@ const UserController = ({userObject, camera, children, walkAction, collisionMap}
     const delta = current - lastTime;
     const newOffset = {z: 0, x: 0};
     if(zSpeed) { 
-      newOffset.z = (delta / 1000) * zSpeed;
+      newOffset.z = (delta / 1000) * (xSpeed ? zSpeed * 1/Math.sqrt(2) : zSpeed);
     }
     if(xSpeed) {
-      newOffset.x = (delta / 1000) * xSpeed;
+      newOffset.x = (delta / 1000) * (zSpeed ? xSpeed * 1/Math.sqrt(2) : xSpeed);
     }
 
     const newPosition = {
@@ -48,8 +49,8 @@ const UserController = ({userObject, camera, children, walkAction, collisionMap}
       camera.position.z += newOffset.z;
     }
     else {
-      zSpeed = 0;
-      xSpeed = 0;
+      // zSpeed = 0;
+      // xSpeed = 0;
       walkAction.stop();
     }
     setTimeout(()=>moveLoop(current))

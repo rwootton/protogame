@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { MeshToonMaterial, Mesh } from 'three';
+import { MeshDepthMaterial, Mesh, MeshToonMaterial } from 'three';
 import useAsset from './useAsset';
 
-const SCALE = 80;
+const SCALE = 90;
 
 const Grass = ({scene, position, rotation, color}) => {
   const grassAsset = useAsset({file: 'assets/squishgrass.glb'});
@@ -24,7 +24,7 @@ const Grass = ({scene, position, rotation, color}) => {
       if(position.y) object.position.y = position.y;
     }
     if(rotation) {
-      if(rotation.z) object.rotation.z = rotation.z;
+      if(rotation.y) object.rotation.y = rotation.y;
     }
 
     object.scale.z = SCALE;
