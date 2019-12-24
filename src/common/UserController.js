@@ -13,6 +13,8 @@ const UserController = ({userObject, camera, children, walkAction, collisionMap}
     }
   }, [userObject])
 
+  let sprint = false;
+
   let zSpeed = 0;
   let xSpeed = 0;
 
@@ -31,10 +33,10 @@ const UserController = ({userObject, camera, children, walkAction, collisionMap}
     const delta = current - lastTime;
     const newOffset = {z: 0, x: 0};
     if(zSpeed) { 
-      newOffset.z = (delta / 1000) * (xSpeed ? zSpeed * 1/Math.sqrt(2) : zSpeed);
+      newOffset.z = (delta / 1000) * (xSpeed ? zSpeed * 1/Math.sqrt(2) : zSpeed) * (sprint ? 4 : 1);
     }
     if(xSpeed) {
-      newOffset.x = (delta / 1000) * (zSpeed ? xSpeed * 1/Math.sqrt(2) : xSpeed);
+      newOffset.x = (delta / 1000) * (zSpeed ? xSpeed * 1/Math.sqrt(2) : xSpeed) * (sprint ? 4 : 1);
     }
 
     const newPosition = {
@@ -49,14 +51,15 @@ const UserController = ({userObject, camera, children, walkAction, collisionMap}
       camera.position.z += newOffset.z;
     }
     else {
-      // zSpeed = 0;
-      // xSpeed = 0;
       walkAction.stop();
     }
     setTimeout(()=>moveLoop(current))
   }
 
   const handleKeyDown = ({key}) => {
+    if(key.toLowerCase() === 'shift') {
+      sprint = true;
+    }
     if(key.toLowerCase() === 'm') {
       console.log({userObject})
     }
@@ -75,6 +78,9 @@ const UserController = ({userObject, camera, children, walkAction, collisionMap}
   }
 
   const handleKeyUp = ({key}) => {
+    if(key.toLowerCase() === 'shift') {
+      sprint = false;
+    }
     if(key.toLowerCase() === "w") {
       zSpeed = 0;
     }
