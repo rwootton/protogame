@@ -23,6 +23,7 @@ const World = ({ height, width }) => {
   const [camera, setCamera] = useState(null);
   const [renderer, setRenderer] = useState(null);
   const [clock, setClock] = useState(null);
+  const [socket, setSocket] = useState(null);
 
   const [player, mixer, walkAction] = usePlayer(scene);
 
@@ -38,6 +39,17 @@ const World = ({ height, width }) => {
     setCamera(new PerspectiveCamera(45, width / height, 1, 10000));
     setRenderer(new WebGLRenderer())
     setClock(new Clock());
+    const socket = new WebSocket("wss://www.randalloveson.com:444/levelone");
+    console.log({socket})
+    socket.onopen = e=>{
+      console.log('open', e)
+    }
+    socket.onmessage = e=>{
+      console.log('message', e)
+    }
+    socket.onclose = e=>{
+      console.log('close', e);
+    }
     return () => {
       if(mountPoint && mountPoint.current) mountPoint.current.innerHTML = "";
       if(scene) scene.dispose();
