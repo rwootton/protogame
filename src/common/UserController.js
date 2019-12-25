@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 const speed = 200;
 
-const UserController = ({userObject, camera, children, walkAction, collisionMap}) => {
+const UserController = ({userObject, camera, children, walkAction, runAction, collisionMap}) => {
   const inputDiv = React.createRef();
 
   useEffect(()=>{
@@ -19,12 +19,15 @@ const UserController = ({userObject, camera, children, walkAction, collisionMap}
   let xSpeed = 0;
 
   const animate = () => {
-    inputDiv.current.focus();
+    inputDiv && inputDiv.current &&  inputDiv.current.focus();
     if(zSpeed || xSpeed) {
-      walkAction.play();
+      sprint ? runAction.play() : walkAction.play();
       userObject.rotation.y = Math.atan2(xSpeed, zSpeed);
     }
-    else walkAction.stop();
+    else {
+      walkAction.stop();
+      runAction.stop();
+    }
     requestAnimationFrame(animate);
   }
 
@@ -59,6 +62,7 @@ const UserController = ({userObject, camera, children, walkAction, collisionMap}
   const handleKeyDown = ({key}) => {
     if(key.toLowerCase() === 'shift') {
       sprint = true;
+      walkAction.stop();
     }
     if(key.toLowerCase() === 'm') {
       console.log({userObject})
@@ -80,6 +84,7 @@ const UserController = ({userObject, camera, children, walkAction, collisionMap}
   const handleKeyUp = ({key}) => {
     if(key.toLowerCase() === 'shift') {
       sprint = false;
+      runAction.stop();
     }
     if(key.toLowerCase() === "w") {
       zSpeed = 0;

@@ -10,6 +10,7 @@ const usePlayer = (scene) => {
   const [player, setPlayer] = useState(null);
   const [mixer, setMixer] = useState(null);
   const [walkAction, setWalkAction] = useState(null);
+  const [runAction, setRunAction] = useState(null);
 
   useEffect(() => {
     if (scene && playerFile) {
@@ -50,7 +51,9 @@ const usePlayer = (scene) => {
         setMixer(mixer);
         const action = mixer.clipAction(animations.find(({name})=>name === "idle"));
         const walkAction = mixer.clipAction(animations.find(({name})=>name === "walk"));
+        const runAction = mixer.clipAction(animations.find(({name})=>name === "run"));
         setWalkAction(walkAction);
+        setRunAction(runAction);
 
         action.play();
       }
@@ -73,7 +76,7 @@ const usePlayer = (scene) => {
     }
   }, [scene, playerFile])
 
-  return [player, mixer, walkAction];
+  return [player, mixer, walkAction, runAction];
 }
 
 export default usePlayer;
