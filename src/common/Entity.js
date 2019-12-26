@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import useAsset from './useAsset';
-import { MeshToonMaterial, Mesh } from 'three'
+import { MeshToonMaterial, Mesh, AnimationMixer, Clock } from 'three'
 
 const Entity = ({
   file,
@@ -15,6 +15,7 @@ const Entity = ({
   castShadow
 }) => {
   const entityFile = useAsset({file});
+  let mixer;
 
   useEffect(()=>{
     if (scene && entityFile) {
@@ -55,6 +56,18 @@ const Entity = ({
       if (collisionMap) {
         collisionMap.add({ x: position.x, z: position.z, radius: radius })
       }
+      if(entityFile.animations && entityFile.animations.length) {
+        mixer = new AnimationMixer(object);
+        const clock = new Clock();
+        const action = mixer.clipAction(entityFile.animations[0]);
+        action.play();
+
+        const animateLoop = () => {
+          mixer.update(clock.getDelta())
+          requestAnimationFrame(animateLoop);
+        }
+        animateLoop();
+      }
 
       object.scale.z = scale;
       object.scale.y = scale;
@@ -65,6 +78,7 @@ const Entity = ({
     return () => {
       if (entityFile && entityFile.dispose) entityFile.dispose();
       if (collisionMap) collisionMap.remove({ x: position.x, z: position.z, radius: radius })
+      if(mixer && mixer.dispose) mixer.dispose();
     }
   }, [scene, entityFile])
 
