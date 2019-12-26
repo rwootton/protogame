@@ -6,6 +6,7 @@ const Cat = (
 ) => {
   return <Entity 
     scale={300}
+    radius={60}
     file={'assets/cat.glb'}
     {...props}
   />

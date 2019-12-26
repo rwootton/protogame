@@ -10,28 +10,30 @@ const Entity = ({
   color,
   collisionMap,
   scale = 1,
-  radius
+  radius,
+  colorMap,
+  castShadow
 }) => {
   const entityFile = useAsset({file});
 
   useEffect(()=>{
     if (scene && entityFile) {
       const object = entityFile.scene;
-      if (color) {
-        const toonMaterial = new MeshToonMaterial({ color });
+      if (color || colorMap) {
         object.traverse((child) => {
           if (child instanceof Mesh) {
-            child.castShadow = true;
+            const toonMaterial = new MeshToonMaterial({ color: colorMap && colorMap[child.name] || color });
+            child.castShadow = castShadow;
             child.receiveShadow = true;
             child.material = toonMaterial;
           }
         })
       }
       else {
-        const toonMaterial = new MeshToonMaterial();
         object.traverse((child) => {
           if (child instanceof Mesh) {
-            child.castShadow = true;
+            const toonMaterial = new MeshToonMaterial();
+            child.castShadow = castShadow;
             toonMaterial.skinning = true;
             toonMaterial.map = child.material.map;
             toonMaterial.textures = child.material.textures;

@@ -102,23 +102,22 @@ const World = ({ height, width }) => {
       camera={camera}>
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
         <Cat 
+          collisionMap={collisionMap}
           scene={scene}
-          rotation={{ y: Math.PI/8}}
+          rotation={{ y: Math.PI/2}}
           position={{ x: -240, z: -400, y: -20 }}
         />
         <Tree 
           collisionMap={collisionMap}
-          position={{ x: -200, z: -600 }}
-          rotation={{ y: Math.PI/2 + 0.8 }}
+          position={{ x: 300, z: -600, y: 60 }}
+          rotation={{ y: Math.PI }}
           scene={scene} 
-          color={'#7A5340'}
         />
         <Tree 
           collisionMap={collisionMap}
-          position={{ x: -600, z: -900 }}
+          position={{ x: -600, z: -900, y: 20 }}
           rotation={{ y: Math.PI/2 + 0.4 }}
           scene={scene} 
-          color={'#7A5340'}
         />
         <Ground scene={scene} />
         <Light scene={scene} />
