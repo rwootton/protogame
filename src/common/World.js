@@ -4,7 +4,8 @@ import {
   WebGLRenderer, 
   PerspectiveCamera, 
   Clock,
-  PCFSoftShadowMap
+  PCFSoftShadowMap,
+  Color
 } from 'three';
 import usePlayer from '../character/Player/usePlayer';
 import Npc from '../character/Npc';
@@ -13,7 +14,9 @@ import Light from './Light';
 import Tree from './Tree';
 import Field from './Field'
 import Ground from './Ground'
+import Cat from './Cat';
 import CollisionMap from './CollisionMap';
+import WorldState from '../proto/nivel_pb';
 
 const World = ({ height, width }) => {
   const mountPoint = React.createRef();
@@ -35,7 +38,9 @@ const World = ({ height, width }) => {
 
   useEffect(()=> {
     setCollisionMap(new CollisionMap());
-    setScene(new Scene());
+    const scene = new Scene();
+    scene.background = new Color('#8C8CD0')
+    setScene(scene);
     setCamera(new PerspectiveCamera(45, width / height, 1, 10000));
     setRenderer(new WebGLRenderer())
     setClock(new Clock());
@@ -45,7 +50,10 @@ const World = ({ height, width }) => {
       console.log('open', e)
     }
     socket.onmessage = e=>{
-      console.log('message', e, e.data.text().then((theData)=>{console.log({theData})}))
+      e.data.arrayBuffer().then((theData)=>{
+          const worldState = WorldState.world.deserializeBinary(theData).toObject();
+          console.log(JSON.stringify(worldState))
+      })
     }
     socket.onclose = e=>{
       console.log('close', e);
@@ -93,25 +101,24 @@ const World = ({ height, width }) => {
       mixer={mixer}
       camera={camera}>
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
-        <Npc 
-          position={{ x:-520, z: -800 }}
-          rotation={Math.PI*1.25}
-          color={'#FF5B55'}
+        <Cat 
           scene={scene}
-          mixer={mixer}
-          collisionMap={collisionMap}
+          rotation={{ y: Math.PI/8}}
+          position={{ x: -240, z: -400, y: -20 }}
         />
         <Tree 
           collisionMap={collisionMap}
           position={{ x: -200, z: -600 }}
           rotation={{ y: Math.PI/2 + 0.8 }}
           scene={scene} 
+          color={'#7A5340'}
         />
         <Tree 
           collisionMap={collisionMap}
           position={{ x: -600, z: -900 }}
           rotation={{ y: Math.PI/2 + 0.4 }}
           scene={scene} 
+          color={'#7A5340'}
         />
         <Ground scene={scene} />
         <Light scene={scene} />

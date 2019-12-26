@@ -5,12 +5,16 @@ const Light = ({scene}) => {
 
   useEffect(()=>{
     if(!scene) return;
-    const pointLight = new PointLight('#f2ddce', 0.5);
-    const ambientLight = new AmbientLight(null, 0.8);
-    pointLight.position.set(100, 1000, -460);
+    const pointLight = new PointLight('#FFFFFF', 0.8);
+    const ambientLight = new AmbientLight(null, 0.3);
+    //  X, Y, Z
+    pointLight.position.set(-300, 5000, 300);
     pointLight.castShadow = true;
-    pointLight.shadow.camera.near = 20;
-    pointLight.shadow.camera.far = 6000;
+    pointLight.shadow.camera.near = 1;
+    pointLight.shadow.camera.far = 50000;
+    pointLight.shadow.radius = 2;
+    pointLight.shadow.mapSize.width = 4096;
+    pointLight.shadow.mapSize.height = 4096;
     scene.add(pointLight);
     scene.add(ambientLight);
   }, [scene])
