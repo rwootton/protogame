@@ -39,17 +39,17 @@ const World = ({ height, width }) => {
     setCamera(new PerspectiveCamera(45, width / height, 1, 10000));
     setRenderer(new WebGLRenderer())
     setClock(new Clock());
-    // const socket = new WebSocket("wss://www.randalloveson.com:443/~rakel/protogame/levelone");
-    // console.log({socket})
-    // socket.onopen = e=>{
-    //   console.log('open', e)
-    // }
-    // socket.onmessage = e=>{
-    //   console.log('message', e, e.data.text().then((theData)=>{console.log({theData})}))
-    // }
-    // socket.onclose = e=>{
-    //   console.log('close', e);
-    // }
+    const socket = new WebSocket("wss://www.randalloveson.com:443/~rakel/protogame/levelone");
+    console.log({socket})
+    socket.onopen = e=>{
+      console.log('open', e)
+    }
+    socket.onmessage = e=>{
+      console.log('message', e, e.data.text().then((theData)=>{console.log({theData})}))
+    }
+    socket.onclose = e=>{
+      console.log('close', e);
+    }
     return () => {
       if(mountPoint && mountPoint.current) mountPoint.current.innerHTML = "";
       if(scene) scene.dispose();
