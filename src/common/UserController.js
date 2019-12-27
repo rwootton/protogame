@@ -1,25 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import * as _ from 'lodash';
 
 const speed = 200;
 
-const UserController = ({userObject, camera, children, walkAction, runAction, collisionMap}) => {
+let sprint = false;
+
+let zSpeed = 0;
+let xSpeed = 0;
+
+const UserController = ({
+  userObject, 
+  camera, 
+  children, 
+  walkAction, 
+  runAction, 
+  collisionMap,
+  interactMap
+}) => {
+
   const inputDiv = React.createRef();
+  inputDiv && inputDiv.current &&  inputDiv.current.focus();
 
   useEffect(()=>{
     if(userObject) {
-      inputDiv.current.focus();
       moveLoop(Date.now());
       requestAnimationFrame(animate);
     }
+
+    return () => {
+    }
   }, [userObject])
 
-  let sprint = false;
-
-  let zSpeed = 0;
-  let xSpeed = 0;
-
   const animate = () => {
-    inputDiv && inputDiv.current &&  inputDiv.current.focus();
     if(zSpeed || xSpeed) {
       sprint ? runAction.play() : walkAction.play();
       userObject.rotation.y = Math.atan2(xSpeed, zSpeed);
@@ -42,21 +54,23 @@ const UserController = ({userObject, camera, children, walkAction, runAction, co
       newOffset.x = (delta / 1000) * (zSpeed ? xSpeed * 1/Math.sqrt(2) : xSpeed) * (sprint ? 4 : 1);
     }
 
-    const newPosition = {
-      x: userObject.position.x + newOffset.x, 
-      z: userObject.position.z + newOffset.z
-    };
+    if(zSpeed || xSpeed) {
+      const newPosition = {
+        x: userObject.position.x + newOffset.x, 
+        z: userObject.position.z + newOffset.z
+      };
 
-    if(collisionMap.isOpen(newPosition)) {
-      userObject.position.z += newOffset.z;
-      userObject.position.x += newOffset.x;
-      camera.position.x += newOffset.x;
-      camera.position.z += newOffset.z;
+      if(collisionMap.isOpen(newPosition)) {
+        userObject.position.z += newOffset.z;
+        userObject.position.x += newOffset.x;
+        camera.position.x += newOffset.x;
+        camera.position.z += newOffset.z;
+      }
     }
     else {
       walkAction.stop();
     }
-    setTimeout(()=>moveLoop(current))
+    setTimeout(()=>moveLoop(current), 20)
   }
 
   const handleKeyDown = ({key}) => {
@@ -78,6 +92,12 @@ const UserController = ({userObject, camera, children, walkAction, runAction, co
     }
     if(key.toLowerCase() === "d") {
       xSpeed = speed;
+    }
+    if(key.toLowerCase() === "e") {
+      const availableInteraction = interactMap.getInteractObject(userObject.position);
+      if(availableInteraction) {
+        availableInteraction.onInteract();
+      }
     }
   }
 

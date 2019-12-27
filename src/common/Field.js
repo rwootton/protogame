@@ -17,6 +17,7 @@ const Field = ({scene, radius, count, startPosition}) => {
       position={{
         z: startPosition.z + zOffset,
         x: startPosition.x + xOffset,
+        y: -40
       }}
       rotation={{
         y: -Math.PI/2 + Math.random()

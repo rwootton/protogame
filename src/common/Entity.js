@@ -16,10 +16,11 @@ const Entity = ({
 }) => {
   const entityFile = useAsset({file});
   let mixer;
+  let object;
 
   useEffect(()=>{
     if (scene && entityFile) {
-      const object = entityFile.scene;
+      object = entityFile.scene;
       if (color || colorMap) {
         object.traverse((child) => {
           if (child instanceof Mesh) {
@@ -76,7 +77,9 @@ const Entity = ({
     };
 
     return () => {
+      if(scene) scene.remove(object);
       if (entityFile && entityFile.dispose) entityFile.dispose();
+      if (object && object.dispose) object.dispose();
       if (collisionMap) collisionMap.remove({ x: position.x, z: position.z, radius: radius })
       if(mixer && mixer.dispose) mixer.dispose();
     }

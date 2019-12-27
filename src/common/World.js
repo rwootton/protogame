@@ -15,18 +15,20 @@ import Tree from './Tree';
 import Field from './Field'
 import Ground from './Ground'
 import Cat from './Cat';
+import PickFlowers from './PickFlowers';
 import CollisionMap from './CollisionMap';
+import InteractMap from './InteractMap';
 import WorldState from '../proto/nivel_pb';
 
 const World = ({ height, width }) => {
   const mountPoint = React.createRef();
 
   const [collisionMap, setCollisionMap] = useState(null);
+  const [interactMap, setInteractMap] = useState(null);
   const [scene, setScene] = useState(null);
   const [camera, setCamera] = useState(null);
   const [renderer, setRenderer] = useState(null);
   const [clock, setClock] = useState(null);
-  const [socket, setSocket] = useState(null);
 
   const [player, mixer, walkAction, runAction] = usePlayer(scene);
 
@@ -38,6 +40,7 @@ const World = ({ height, width }) => {
 
   useEffect(()=> {
     setCollisionMap(new CollisionMap());
+    setInteractMap(new InteractMap());
     const scene = new Scene();
     scene.background = new Color('#8C8CD0')
     setScene(scene);
@@ -94,6 +97,7 @@ const World = ({ height, width }) => {
   return (
     <UserController
       collisionMap={collisionMap}
+      interactMap={interactMap}
       scene={scene}
       userObject={player}
       walkAction={walkAction}
@@ -103,8 +107,8 @@ const World = ({ height, width }) => {
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
         <Cat 
           collisionMap={collisionMap}
-          scene={scene}
           castShadow={true}
+          scene={scene}
           rotation={{ y: Math.PI/2}}
           position={{ x: -240, z: -1500, y: -20 }}
         />
@@ -133,6 +137,10 @@ const World = ({ height, width }) => {
           radius={500}
           count={100}
           startPosition={{ x: 600, z: -1300 }}
+        />
+        <PickFlowers
+          scene={scene}
+          interactMap={interactMap}
         />
       </div>
     </UserController>
