@@ -104,12 +104,13 @@ const World = ({ height, width }) => {
         <Cat 
           collisionMap={collisionMap}
           scene={scene}
+          castShadow={true}
           rotation={{ y: Math.PI/2}}
-          position={{ x: -240, z: -400, y: -20 }}
+          position={{ x: -240, z: -1500, y: -20 }}
         />
         <Tree 
           collisionMap={collisionMap}
-          position={{ x: 300, z: -600, y: 60 }}
+          position={{ x: 300, z: -600, y: 80 }}
           rotation={{ y: Math.PI }}
           scene={scene} 
         />
