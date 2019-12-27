@@ -33,7 +33,7 @@ const usePlayer = (scene) => {
             child.material = toonMaterial;
           }
           else if(child.name === "shirt") {
-            const toonMaterial = new MeshToonMaterial({color: '#C7B294'})
+            const toonMaterial = new MeshToonMaterial({color: '#E0B896'})
             toonMaterial.skinning = true;
             child.material = toonMaterial;
           }
@@ -43,7 +43,17 @@ const usePlayer = (scene) => {
             child.material = toonMaterial;
           }
           else if(child.name === "belt") {
-            const toonMaterial = new MeshToonMaterial({color: '#333333'})
+            const toonMaterial = new MeshToonMaterial({color: '#873524'})
+            toonMaterial.skinning = true;
+            child.material = toonMaterial;
+          }
+          else if(child.name === "loop") {
+            const toonMaterial = new MeshToonMaterial({color: '#C79130'})
+            toonMaterial.skinning = true;
+            child.material = toonMaterial;
+          }
+          else if(child.name === "boots") {
+            const toonMaterial = new MeshToonMaterial({color: '#873524'})
             toonMaterial.skinning = true;
             child.material = toonMaterial;
           }
