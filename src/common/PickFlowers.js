@@ -13,9 +13,9 @@ const PickFlowers = ({
   const [tulips, dispatch] = useReducer(reducer, [
     {x: -140, z: -1500, y: 20, rotate: 0.33, id: 0}, 
     {x: -180, z: -800, y: 20, rotate: 1.5, id: 1}, 
-    {x: -200, z: -700, y: 20, rotate: 1.5, id: 2}, 
+    {x: -200, z: -700, y: 20, rotate: 2, id: 2}, 
     {x: -500, z: -400, y: 20, rotate: 0.76, id: 3},
-    {x: 20, z: 20, y: 20, rotate: 1.76, id: 4}
+    {x: 20, z: 20, y: 20, rotate: 0.66, id: 4}
   ]);
 
   useEffect(()=>{
@@ -30,10 +30,11 @@ const PickFlowers = ({
   }, [scene, interactMap])
 
   return <>
-    {tulips.map(({x, z, y, id})=>{
+    {tulips.map(({x, z, y, id, rotate})=>{
       return <Tulip 
         key={id}
         scene={scene}
+        rotation={{y: rotate * Math.PI}}
         position={{x, z, y}} 
       />
     })}

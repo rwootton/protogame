@@ -1,64 +1,41 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, Children} from 'react';
 import { AnimationMixer, MeshToonMaterial, Mesh } from 'three';
 import useAsset from '../../common/useAsset';
 
 const file = 'assets/elf-test.glb';
 const scale = 100;
 
-const usePlayer = (scene) => {
+const usePlayer = (scene, colorMap) => {
   const playerFile = useAsset({file});
   const [player, setPlayer] = useState(null);
   const [mixer, setMixer] = useState(null);
   const [walkAction, setWalkAction] = useState(null);
   const [runAction, setRunAction] = useState(null);
 
+  colorMap = colorMap || {
+    eyes: '#FFFFFF',
+    pupils: '#333333',
+    // eyelash: '#333333',
+    // hair: '#FF3A3A',
+    hair2: '#CCA25F',
+    shirt: '#E0B896',
+    pants: '#7A3021',
+    belt: '#873524',
+    loop: '#C79130',
+    boots: '#873524',
+    skin: '#FFAA86',
+  }
+
   useEffect(() => {
     if (scene && playerFile) {
       const object = playerFile.scene;
       object.traverse((child)=>{
         if(child instanceof Mesh) {
-          if(child.name === "eyes") {
-            const toonMaterial = new MeshToonMaterial({color: '#FFFFFF'})
-            toonMaterial.skinning = true;
-            child.material = toonMaterial;
-          }
-          else if(child.name === "pupils" || child.name === "eyelash") {
-            const toonMaterial = new MeshToonMaterial({color: '#333333'})
-            toonMaterial.skinning = true;
-            child.material = toonMaterial;
-          }
-          else if(child.name === "hair") {
-            const toonMaterial = new MeshToonMaterial({color: '#FF3A3A'})
-            toonMaterial.skinning = true;
-            child.material = toonMaterial;
-          }
-          else if(child.name === "shirt") {
-            const toonMaterial = new MeshToonMaterial({color: '#E0B896'})
-            toonMaterial.skinning = true;
-            child.material = toonMaterial;
-          }
-          else if(child.name === "pants") {
-            const toonMaterial = new MeshToonMaterial({color: '#7A3021'})
-            toonMaterial.skinning = true;
-            child.material = toonMaterial;
-          }
-          else if(child.name === "belt") {
-            const toonMaterial = new MeshToonMaterial({color: '#873524'})
-            toonMaterial.skinning = true;
-            child.material = toonMaterial;
-          }
-          else if(child.name === "loop") {
-            const toonMaterial = new MeshToonMaterial({color: '#C79130'})
-            toonMaterial.skinning = true;
-            child.material = toonMaterial;
-          }
-          else if(child.name === "boots") {
-            const toonMaterial = new MeshToonMaterial({color: '#873524'})
-            toonMaterial.skinning = true;
-            child.material = toonMaterial;
+          if(!colorMap[child.name]) {
+            child.visible = false;
           }
           else {
-            const toonMaterial = new MeshToonMaterial({color: '#FFAA86'})
+            const toonMaterial = new MeshToonMaterial({color: colorMap[child.name]})
             toonMaterial.skinning = true;
             child.castShadow = true;
             child.material = toonMaterial;
