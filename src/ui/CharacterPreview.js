@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Scene, PerspectiveCamera } from 'three';
+import { 
+  PerspectiveCamera, 
+  WebGLRenderer, 
+  Color 
+} from 'three';
+
+import Light from '../common/Light';
 
 const CharacterPreview = ({
   width,
@@ -18,28 +24,35 @@ const CharacterPreview = ({
   }
 
   useEffect(()=>{
-    if(mountPoint && mountPoint.current) {
-      const pCamera = new PerspectiveCamera(45, width/height, 1, 1000);
-      pCamera.position.z = 800;
-      pCamera.position.y = 1000;
+    if(mountPoint && mountPoint.current && scene) {
+      const pCamera = new PerspectiveCamera(45, width/height, 1, 10000);
+      pCamera.position.z = 100;
+      pCamera.position.y = 500;
       pCamera.rotation.x = 1.8*Math.PI;
+      
       setCamera(pCamera);
+
+      scene.background = new Color('#88a677')
       const render = new WebGLRenderer();
       render.setSize(width, height)
       setRenderer(render)
-      mountPoint.current.appendChild(renderer.domElement);
-      animate();
+      mountPoint.current.appendChild(render.domElement);
     }
 
     return () => {
     }
-  }, [mountPoint, player]);
+  }, [scene]);
+
+  useEffect(()=>{
+    if(renderer && camera) animate();
+  }, [renderer, camera])
 
 
   return (
     <div 
       ref={mountPoint} 
       style={{ width, height }}>
+        <Light scene={scene} />
     </div>
   )
 }

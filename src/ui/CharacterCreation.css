@@ -1,5 +1,57 @@
 .characterScreen {
+  position: relative;
+  overflow: hidden;
+}
+
+.controls {
   position: absolute;
-  background-color: rgba(163, 191, 164, 0.4);
-  
+  top: 40px;
+  left: 40px;
+  width: 300px;
+  height: 400px;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  color: #fff;
+  z-index: 3;
+  padding: 16px;
+  box-shadow: 6px 6px 8px -5px rgba(0, 0, 0, .2);
+}
+
+.buttons {
+  margin-top: 8px;
+  display: flex;
+}
+
+.button {
+  user-select: none;
+  cursor: pointer;
+  border: 1px solid #FFFFFF;
+  padding: 2px 4px;
+  border-radius: 3px;
+  margin-right: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.button:hover {
+  background-color: rgba(256, 256, 256, 0.1);
+}
+
+.label {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.9px;
+  line-height: 20px;
+}
+
+.option {
+  display: inline-block;
+  width: 80px;
+  text-align: center;
+}
+
+.section {
+  display: block;
+  height: 24px;
 }

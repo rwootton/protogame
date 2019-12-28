@@ -1,5 +1,5 @@
 import {useEffect, useState, Children} from 'react';
-import { AnimationMixer, MeshToonMaterial, Mesh } from 'three';
+import { AnimationMixer, MeshToonMaterial, Mesh, Color } from 'three';
 import useAsset from '../../common/useAsset';
 
 const file = 'assets/elf-test.glb';
@@ -12,34 +12,34 @@ const usePlayer = (scene, colorMap) => {
   const [walkAction, setWalkAction] = useState(null);
   const [runAction, setRunAction] = useState(null);
 
-  colorMap = colorMap || {
-    eyes: '#FFFFFF',
-    pupils: '#333333',
-    // eyelash: '#333333',
-    // hair: '#FF3A3A',
-    hair2: '#CCA25F',
-    shirt: '#E0B896',
-    pants: '#7A3021',
-    belt: '#873524',
-    loop: '#C79130',
-    boots: '#873524',
-    skin: '#FFAA86',
-  }
+  useEffect(()=> {
+    if(player && colorMap) {
+      player.traverse((child)=>{
+        if(child instanceof Mesh) {
+          if(!colorMap[child.name]) {
+            child.visible = false;
+          }
+          else {
+            child.visible = true;
+            child.material.color = new Color(colorMap[child.name]);
+          }
+        }
+      })
+    }
+  }, [colorMap])
 
   useEffect(() => {
     if (scene && playerFile) {
       const object = playerFile.scene;
       object.traverse((child)=>{
         if(child instanceof Mesh) {
-          if(!colorMap[child.name]) {
-            child.visible = false;
-          }
-          else {
             const toonMaterial = new MeshToonMaterial({color: colorMap[child.name]})
+            if(!colorMap[child.name]) {
+              child.visible = false;
+            }
             toonMaterial.skinning = true;
             child.castShadow = true;
             child.material = toonMaterial;
-          }
         }
       })
       const animations = playerFile.animations;

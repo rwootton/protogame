@@ -20,7 +20,7 @@ import CollisionMap from './CollisionMap';
 import InteractMap from './InteractMap';
 import WorldState from '../proto/nivel_pb';
 
-const World = ({ height, width }) => {
+const World = ({ height, width, colorMap }) => {
   const mountPoint = React.createRef();
 
   const [collisionMap, setCollisionMap] = useState(null);
@@ -30,7 +30,7 @@ const World = ({ height, width }) => {
   const [renderer, setRenderer] = useState(null);
   const [clock, setClock] = useState(null);
 
-  const [player, mixer, walkAction, runAction] = usePlayer(scene);
+  const [player, mixer, walkAction, runAction] = usePlayer(scene, colorMap);
 
   const animate = () => {
     requestAnimationFrame(animate);
@@ -47,20 +47,20 @@ const World = ({ height, width }) => {
     setCamera(new PerspectiveCamera(45, width / height, 1, 10000));
     setRenderer(new WebGLRenderer())
     setClock(new Clock());
-    const socket = new WebSocket("wss://www.randalloveson.com:443/~rakel/protogame/levelone");
-    console.log({socket})
-    socket.onopen = e=>{
-      console.log('open', e)
-    }
-    socket.onmessage = e=>{
-      e.data.arrayBuffer().then((theData)=>{
-          const worldState = WorldState.world.deserializeBinary(theData).toObject();
-          console.log(JSON.stringify(worldState))
-      })
-    }
-    socket.onclose = e=>{
-      console.log('close', e);
-    }
+    // const socket = new WebSocket("wss://www.randalloveson.com:443/~rakel/protogame/levelone");
+    // console.log({socket})
+    // socket.onopen = e=>{
+    //   console.log('open', e)
+    // }
+    // socket.onmessage = e=>{
+    //   e.data.arrayBuffer().then((theData)=>{
+    //     const worldState = WorldState.ServerMsgDto.deserializeBinary(theData).toObject();
+    //     console.log(JSON.stringify(worldState))
+    //   })
+    // }
+    // socket.onclose = e=>{
+    //   console.log('close', e);
+    // }
     return () => {
       if(mountPoint && mountPoint.current) mountPoint.current.innerHTML = "";
       if(scene) scene.dispose();
