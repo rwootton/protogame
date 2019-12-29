@@ -35,7 +35,7 @@ const UserController = ({
   const animate = () => {
     if(zSpeed || xSpeed) {
       sprint ? runAction.play() : walkAction.play();
-      idleAction.stop();
+      if(sprint) idleAction.stop();
       userObject.rotation.y = Math.atan2(xSpeed, zSpeed);
     }
     else {

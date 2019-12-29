@@ -37,12 +37,6 @@ const World = ({ height, width, colorMap }) => {
     if(renderer) renderer.render(scene, camera);
   }
 
-  useEffect(()=>{
-    if(player) {
-      socket.onSpawn(player)
-    }
-  }, [player])
-
   useEffect(()=> {
     setCollisionMap(new CollisionMap());
     setInteractMap(new InteractMap());
@@ -85,10 +79,15 @@ const World = ({ height, width, colorMap }) => {
 
   }, [mixer]);
 
-  const socket = useSocket({});
+  const onTick = ({}) => {
+    
+  }
+
+  const socket = useSocket({onTick});
 
   return (
     <UserController
+      socket={socket}
       collisionMap={collisionMap}
       interactMap={interactMap}
       scene={scene}
@@ -99,6 +98,8 @@ const World = ({ height, width, colorMap }) => {
       mixer={mixer}
       camera={camera}>
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
+        <Ground scene={scene} />
+        <Light scene={scene} />
         <Cat 
           collisionMap={collisionMap}
           castShadow={true}
@@ -118,8 +119,6 @@ const World = ({ height, width, colorMap }) => {
           rotation={{ y: Math.PI/2 + 0.4 }}
           scene={scene} 
         />
-        <Ground scene={scene} />
-        <Light scene={scene} />
         <Field
           scene={scene}
           radius={600}
