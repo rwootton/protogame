@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as _ from 'lodash';
+import { playerAnimations } from '../character/constants/AnimationConstants';
 
 const speed = 800;
 
@@ -10,19 +11,19 @@ let xSpeed = 0;
 
 let gait = 0;
 let rotation = 0;
+let animation = null;
 
+let lastAnimation = null;
 let lastGait = 0;
 let lastFacing = 0;
 
 const UserController = ({
   userObject, 
+  actions,
   camera, 
   children, 
-  walkAction, 
-  runAction, 
   collisionMap,
   interactMap,
-  idleAction,
   socket
 }) => {
 
@@ -40,23 +41,26 @@ const UserController = ({
   }, [userObject])
 
   const animate = () => {
-    if(zSpeed || xSpeed) {
-      sprint ? runAction.play() : walkAction.play();
-      if(sprint) idleAction.stop();
+    if(xSpeed || zSpeed) {
       rotation = Math.atan2(xSpeed, zSpeed);
       userObject.rotation.y = rotation;
     }
-    else {
-      walkAction.stop();
-      runAction.stop();
-      idleAction.play();
-    }
+    const currentAnimation = playerAnimations[animation];
+    Object.keys(actions).forEach(key=>{
+      if(currentAnimation === key) {
+        actions[key].play();
+      }
+      else {
+        actions[key].stop();
+      }
+    }) 
     requestAnimationFrame(animate);
   }
 
   const moveLoop = (lastTime) => {
     const current = Date.now();
     gait = zSpeed || xSpeed ? (sprint ? 1 : 0.25) : 0;
+    animation = zSpeed || xSpeed ? (sprint ? 3 : 2) : 1;
     if (gait) {
       const delta = current - lastTime;
       const distance = speed * gait * delta / 1000;
@@ -77,12 +81,12 @@ const UserController = ({
       }
       else {
         gait = 0;
-        walkAction.stop();
+        actions.walk.stop();
       }
     }
     else {
       gait = 0;
-      walkAction.stop();
+      actions.walk.stop();
     }
     sendMoveUpdate();
     setTimeout(() => moveLoop(current), 20)
@@ -91,7 +95,7 @@ const UserController = ({
   const handleKeyDown = ({key}) => {
     if(key.toLowerCase() === 'shift') {
       sprint = true;
-      walkAction.stop();
+      actions.walk.stop();
     }
     if(key.toLowerCase() === 'm') {
       console.log({userObject})
@@ -119,7 +123,7 @@ const UserController = ({
   const handleKeyUp = ({key}) => {
     if(key.toLowerCase() === 'shift') {
       sprint = false;
-      runAction.stop();
+      actions.run.stop();
     }
     if(key.toLowerCase() === "w") {
       zSpeed = 0;
@@ -141,6 +145,11 @@ const UserController = ({
       lastGait = gait;
       lastFacing = facing;
       socket.onMove({gait, facing});
+    }
+
+    if(lastAnimation !== animation) {
+      socket.onAnimate({animation})
+      lastAnimation = animation;
     }
   }
 

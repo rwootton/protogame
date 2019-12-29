@@ -33,7 +33,7 @@ const World = ({ height, width, colorMap }) => {
 
   const [serverEntities, setServerEntities] = useState([]);
 
-  const [player, mixer, walkAction, runAction, idleAction] = usePlayer(scene, colorMap);
+  const [player, mixer, actions] = usePlayer(scene, colorMap);
 
   const animate = () => {
     requestAnimationFrame(animate);
@@ -98,15 +98,13 @@ const World = ({ height, width, colorMap }) => {
       interactMap={interactMap}
       scene={scene}
       userObject={player}
-      walkAction={walkAction}
-      runAction={runAction}
-      idleAction={idleAction}
+      actions={actions}
       mixer={mixer}
       camera={camera}>
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
         <Ground scene={scene} />
         <Light scene={scene} />
-        {serverEntities && serverEntities.map(({gid, posX, posY, posZ, collisionRadius, facing}, index)=>{
+        {serverEntities && serverEntities.map(({gid, posX, posY, posZ, collisionRadius, facing, animation, gait}, index)=>{
           const EntityType = GidTypeMap[gid];
           if(EntityType) {
             return <EntityType 
@@ -124,9 +122,11 @@ const World = ({ height, width, colorMap }) => {
               collisionMap={collisionMap}
               scene={scene}
               position={{x: posX, y: posY, z: posZ}} 
+              animation={animation}
               rotation={{y: facing}}
               color={'#99ccee'}
               radius={0}
+              gait={gait}
             />
           }
           return null;

@@ -1,11 +1,23 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { MeshToonMaterial, Mesh, AnimationMixer, Clock } from 'three';
 import useAsset from '../common/useAsset'
+import { playerAnimations } from '../character/constants/AnimationConstants';
 
 const SCALE = 100;
+let session;
 
-const Npc = ({position, rotation, color, scene, collisionMap, radius}) => {
+const Npc = ({
+  position, 
+  rotation, 
+  color, 
+  scene, 
+  collisionMap, 
+  radius,
+  animation,
+  gait
+}) => {
   const characterFile = useAsset({file: 'assets/elf-test.glb'});
+  const [actions, setActions] = useState(null);
   useEffect(()=>{
     if(scene && characterFile) {
       const character = characterFile.scene;
@@ -31,10 +43,14 @@ const Npc = ({position, rotation, color, scene, collisionMap, radius}) => {
       const mixer = new AnimationMixer(character);
       const clock = new Clock();
       const action = mixer.clipAction(animations.find(({name})=>name === "idle"));
+      const walkAction = mixer.clipAction(animations.find(({name})=>name === "walk"));
+      const runAction = mixer.clipAction(animations.find(({name})=>name === "run"));
+      setActions({idle: action, walk: walkAction, run: runAction});
       action.play();
 
       const animateLoop = () => {
-        mixer.update(clock.getDelta());
+        const delta = clock.getDelta();
+        mixer.update(delta);
         requestAnimationFrame(animateLoop);
       }
 
@@ -51,10 +67,25 @@ const Npc = ({position, rotation, color, scene, collisionMap, radius}) => {
   }, [scene, characterFile])
 
   useEffect(()=>{
-    if(scene && characterFile && position) {
+    if(scene && characterFile && (position || gait)) {
       characterFile.scene.position.x = position.x;
       characterFile.scene.position.y = position.y;
       characterFile.scene.position.z = position.z;
+      session = Date.now();
+      let movePredict;
+      if(gait) {
+        movePredict = (time, localSession) => {
+          if(session != localSession) return;
+          const heading = rotation.y;
+          const current = Date.now();
+          const delta = current-time;
+          const distance = 800 * gait * delta / 1000;
+          characterFile.scene.position.x += Math.sin(heading) * distance;
+          characterFile.scene.position.z += Math.cos(heading) * distance;
+          setTimeout(()=>movePredict(current, localSession));
+        }
+        movePredict(Date.now(), session);
+      }
     }
 
   }, [position])
@@ -63,8 +94,22 @@ const Npc = ({position, rotation, color, scene, collisionMap, radius}) => {
     if(scene && characterFile && rotation) {
       characterFile.scene.rotation.y = rotation.y;
     }
-
   }, [rotation])
+
+  useEffect(()=>{
+    if (scene && characterFile && animation) {
+      const animateKey = playerAnimations[animation];
+      Object.keys(actions).forEach(key => {
+        if (key === animateKey) {
+          actions[key].play();
+        }
+        else {
+          actions[key].stop();
+        }
+      })
+    }
+
+  }, [animation])
 
   return <></>
 }

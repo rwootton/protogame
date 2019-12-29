@@ -3,7 +3,8 @@ import {
   ServerMsgDto, 
   ClientMsgDto, 
   ControlDto,
-  ControlGaitDto
+  ControlGaitDto,
+  ControlAnimateDto
 } from '../proto/nivel_pb';
 
 let gid;
@@ -16,7 +17,7 @@ const useSocket = ({onTick}) => {
       console.log('open', e)
     }
     socket.onmessage = e=>{
-      e.data.arrayBuffer().then((theData)=>{
+      e && e.data && e.data.arrayBuffer().then((theData)=>{
         const size = new DataView(theData, 0, 4).getUint32(0, false);
         const binary = theData.slice(4, 4+size);
         const message = ServerMsgDto.deserializeBinary(binary).toObject();
@@ -35,7 +36,7 @@ const useSocket = ({onTick}) => {
 
   const onMove = ({gait, facing}) => {
     const control = new ControlDto();
-    const tick = Math.round(new Date().getTime() / 8);
+    const tick = Math.round(new Date().getTime() / 8) - 12;
     control.setTick(tick)
     const gaitDto = new ControlGaitDto();
     gaitDto.setHeading(facing);
@@ -54,9 +55,29 @@ const useSocket = ({onTick}) => {
     socket.send(binary);
   }
 
+  const onAnimate = ({animation}) => {
+    const control = new ControlDto();
+    const tick = Math.round(new Date().getTime() / 8);
+    control.setTick(tick)
+    const animate = new ControlAnimateDto();
+    animate.setAnimation(animation);
+    control.setAnimate(animate);
+    const message = new ClientMsgDto();
+    message.setControl(control);
+
+    const binary = message.serializeBinary();
+    const size = binary.length;
+    const sizeArray = new ArrayBuffer(4);
+    const dataView = new DataView(sizeArray);
+    dataView.setUint32(0, size, false);
+    socket.send(dataView);
+    socket.send(binary);
+  }
+
   return {
     gid,
-    onMove
+    onMove,
+    onAnimate
   };
 }
 
