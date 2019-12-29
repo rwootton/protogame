@@ -15,7 +15,8 @@ const UserController = ({
   walkAction, 
   runAction, 
   collisionMap,
-  interactMap
+  interactMap,
+  idleAction
 }) => {
 
   const inputDiv = React.createRef();
@@ -34,11 +35,13 @@ const UserController = ({
   const animate = () => {
     if(zSpeed || xSpeed) {
       sprint ? runAction.play() : walkAction.play();
+      idleAction.stop();
       userObject.rotation.y = Math.atan2(xSpeed, zSpeed);
     }
     else {
       walkAction.stop();
       runAction.stop();
+      idleAction.play();
     }
     requestAnimationFrame(animate);
   }

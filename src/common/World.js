@@ -8,7 +8,6 @@ import {
   Color
 } from 'three';
 import usePlayer from '../character/Player/usePlayer';
-import Npc from '../character/Npc';
 import UserController from './UserController';
 import Light from './Light';
 import Tree from './Tree';
@@ -18,7 +17,7 @@ import Cat from './Cat';
 import PickFlowers from './PickFlowers';
 import CollisionMap from './CollisionMap';
 import InteractMap from './InteractMap';
-import WorldState from '../proto/nivel_pb';
+import useSocket  from '../client/NivelSocket';
 
 const World = ({ height, width, colorMap }) => {
   const mountPoint = React.createRef();
@@ -30,13 +29,19 @@ const World = ({ height, width, colorMap }) => {
   const [renderer, setRenderer] = useState(null);
   const [clock, setClock] = useState(null);
 
-  const [player, mixer, walkAction, runAction] = usePlayer(scene, colorMap);
+  const [player, mixer, walkAction, runAction, idleAction] = usePlayer(scene, colorMap);
 
   const animate = () => {
     requestAnimationFrame(animate);
     if(mixer) mixer.update(clock.getDelta());
     if(renderer) renderer.render(scene, camera);
   }
+
+  useEffect(()=>{
+    if(player) {
+      socket.onSpawn(player)
+    }
+  }, [player])
 
   useEffect(()=> {
     setCollisionMap(new CollisionMap());
@@ -47,20 +52,6 @@ const World = ({ height, width, colorMap }) => {
     setCamera(new PerspectiveCamera(45, width / height, 1, 10000));
     setRenderer(new WebGLRenderer())
     setClock(new Clock());
-    // const socket = new WebSocket("wss://www.randalloveson.com:443/~rakel/protogame/levelone");
-    // console.log({socket})
-    // socket.onopen = e=>{
-    //   console.log('open', e)
-    // }
-    // socket.onmessage = e=>{
-    //   e.data.arrayBuffer().then((theData)=>{
-    //     const worldState = WorldState.ServerMsgDto.deserializeBinary(theData).toObject();
-    //     console.log(JSON.stringify(worldState))
-    //   })
-    // }
-    // socket.onclose = e=>{
-    //   console.log('close', e);
-    // }
     return () => {
       if(mountPoint && mountPoint.current) mountPoint.current.innerHTML = "";
       if(scene) scene.dispose();
@@ -94,6 +85,8 @@ const World = ({ height, width, colorMap }) => {
 
   }, [mixer]);
 
+  const socket = useSocket({});
+
   return (
     <UserController
       collisionMap={collisionMap}
@@ -102,6 +95,7 @@ const World = ({ height, width, colorMap }) => {
       userObject={player}
       walkAction={walkAction}
       runAction={runAction}
+      idleAction={idleAction}
       mixer={mixer}
       camera={camera}>
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>

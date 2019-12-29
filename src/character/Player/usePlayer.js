@@ -11,6 +11,7 @@ const usePlayer = (scene, colorMap) => {
   const [mixer, setMixer] = useState(null);
   const [walkAction, setWalkAction] = useState(null);
   const [runAction, setRunAction] = useState(null);
+  const [idleAction, setIdleAction] = useState(null);
 
   useEffect(()=> {
     if(player && colorMap) {
@@ -51,6 +52,7 @@ const usePlayer = (scene, colorMap) => {
         const runAction = mixer.clipAction(animations.find(({name})=>name === "run"));
         setWalkAction(walkAction);
         setRunAction(runAction);
+        setIdleAction(action);
 
         action.play();
       }
@@ -73,7 +75,7 @@ const usePlayer = (scene, colorMap) => {
     }
   }, [scene, playerFile])
 
-  return [player, mixer, walkAction, runAction];
+  return [player, mixer, walkAction, runAction, idleAction];
 }
 
 export default usePlayer;
