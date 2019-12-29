@@ -125,16 +125,16 @@ const UserController = ({
       sprint = false;
       actions.run.stop();
     }
-    if(key.toLowerCase() === "w") {
+    if(key.toLowerCase() === "w" && zSpeed === -speed) {
       zSpeed = 0;
     }
-    if(key.toLowerCase() === "s") {
+    if(key.toLowerCase() === "s" && zSpeed === speed) {
       zSpeed = 0;
     }
-    if(key.toLowerCase() === "a") {
+    if(key.toLowerCase() === "a" && xSpeed === -speed) {
       xSpeed = 0;
     }
-    if(key.toLowerCase() === "d") {
+    if(key.toLowerCase() === "d" && xSpeed === speed) {
       xSpeed = 0;
     }
   }
