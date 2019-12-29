@@ -3,13 +3,12 @@ import {
   ServerMsgDto, 
   ClientMsgDto, 
   ControlDto,
-  EventDto, 
-  EntityDto
+  ControlGaitDto
 } from '../proto/nivel_pb';
 
-let socket;
 let gid;
-
+let socket;
+ 
 const useSocket = ({onTick}) => {
   useEffect(()=>{
     socket = new WebSocket("wss://www.randalloveson.com:443/~rakel/protogame/levelone");
@@ -23,9 +22,10 @@ const useSocket = ({onTick}) => {
         const message = ServerMsgDto.deserializeBinary(binary).toObject();
         if(message.youre) {
           gid = message.youre.gid;
-          // console.log(gid)
         }
-        // console.log(message)
+        else if(message.entityList) {
+          onTick(message.entityList.entitiesList);
+        }
       })
     }
     socket.onclose = e=>{
@@ -33,11 +33,29 @@ const useSocket = ({onTick}) => {
     }
   }, []);
 
-  const onMove = () => {
+  const onMove = ({gait, facing}) => {
+    const control = new ControlDto();
+    const tick = Math.round(new Date().getTime() / 8);
+    control.setTick(tick)
+    const gaitDto = new ControlGaitDto();
+    gaitDto.setHeading(facing);
+    gaitDto.setFacing(facing);
+    gaitDto.setGait(gait);
+    control.setGait(gaitDto);
+    const message = new ClientMsgDto();
+    message.setControl(control);
 
+    const binary = message.serializeBinary();
+    const size = binary.length;
+    const sizeArray = new ArrayBuffer(4);
+    const dataView = new DataView(sizeArray);
+    dataView.setUint32(0, size, false);
+    socket.send(dataView);
+    socket.send(binary);
   }
 
   return {
+    gid,
     onMove
   };
 }

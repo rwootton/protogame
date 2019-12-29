@@ -4,7 +4,7 @@ import useAsset from '../common/useAsset'
 
 const SCALE = 100;
 
-const Npc = ({position, rotation, color, scene, collisionMap}) => {
+const Npc = ({position, rotation, color, scene, collisionMap, radius}) => {
   const characterFile = useAsset({file: 'assets/elf-test.glb'});
   useEffect(()=>{
     if(scene && characterFile) {
@@ -38,11 +38,33 @@ const Npc = ({position, rotation, color, scene, collisionMap}) => {
         requestAnimationFrame(animateLoop);
       }
 
-      collisionMap.add({z: character.position.z, x: character.position.x, radius: 70})
+      collisionMap.add({z: character.position.z, x: character.position.x, radius})
       scene.add(character);
       animateLoop();
     }
+
+    return () => {
+      if(scene && characterFile) {
+        scene.remove(characterFile.scene)
+      };
+    }
   }, [scene, characterFile])
+
+  useEffect(()=>{
+    if(scene && characterFile && position) {
+      characterFile.scene.position.x = position.x;
+      characterFile.scene.position.y = position.y;
+      characterFile.scene.position.z = position.z;
+    }
+
+  }, [position])
+
+  useEffect(()=>{
+    if(scene && characterFile && rotation) {
+      characterFile.scene.rotation.y = rotation.y;
+    }
+
+  }, [rotation])
 
   return <></>
 }

@@ -18,6 +18,8 @@ import PickFlowers from './PickFlowers';
 import CollisionMap from './CollisionMap';
 import InteractMap from './InteractMap';
 import useSocket  from '../client/NivelSocket';
+import Npc from '../character/Npc';
+import { GidTypeMap } from './constants/GidTypes';
 
 const World = ({ height, width, colorMap }) => {
   const mountPoint = React.createRef();
@@ -28,6 +30,8 @@ const World = ({ height, width, colorMap }) => {
   const [camera, setCamera] = useState(null);
   const [renderer, setRenderer] = useState(null);
   const [clock, setClock] = useState(null);
+
+  const [serverEntities, setServerEntities] = useState([]);
 
   const [player, mixer, walkAction, runAction, idleAction] = usePlayer(scene, colorMap);
 
@@ -79,8 +83,10 @@ const World = ({ height, width, colorMap }) => {
 
   }, [mixer]);
 
-  const onTick = ({}) => {
-    
+  const onTick = (entities) => {
+    if(entities) {
+      setServerEntities(entities)
+    }
   }
 
   const socket = useSocket({onTick});
@@ -100,25 +106,31 @@ const World = ({ height, width, colorMap }) => {
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
         <Ground scene={scene} />
         <Light scene={scene} />
-        <Cat 
-          collisionMap={collisionMap}
-          castShadow={true}
-          scene={scene}
-          rotation={{ y: Math.PI/2}}
-          position={{ x: -240, z: -1500, y: -20 }}
-        />
-        <Tree 
-          collisionMap={collisionMap}
-          position={{ x: 300, z: -600, y: 80 }}
-          rotation={{ y: Math.PI }}
-          scene={scene} 
-        />
-        <Tree 
-          collisionMap={collisionMap}
-          position={{ x: -600, z: -900, y: 20 }}
-          rotation={{ y: Math.PI/2 + 0.4 }}
-          scene={scene} 
-        />
+        {serverEntities && serverEntities.map(({gid, posX, posY, posZ, collisionRadius, facing}, index)=>{
+          const EntityType = GidTypeMap[gid];
+          if(EntityType) {
+            return <EntityType 
+              collisionMap={collisionMap}
+              key={gid+''+index}
+              scene={scene}
+              position={{x: posX, y: posY, z: posZ}} 
+              rotation={{y: facing}}
+              radius={collisionRadius}
+            />
+          }
+          if(gid != socket.gid) {
+            return <Npc 
+              key={gid}
+              collisionMap={collisionMap}
+              scene={scene}
+              position={{x: posX, y: posY, z: posZ}} 
+              rotation={{y: facing}}
+              color={'#99ccee'}
+              radius={0}
+            />
+          }
+          return null;
+        })}
         <Field
           scene={scene}
           radius={600}

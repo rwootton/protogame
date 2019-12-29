@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import * as _ from 'lodash';
 
-const speed = 200;
+const speed = 800;
 
 let sprint = false;
 
 let zSpeed = 0;
 let xSpeed = 0;
+
+let gait = 0;
+let rotation = 0;
+
+let lastGait = 0;
+let lastFacing = 0;
 
 const UserController = ({
   userObject, 
@@ -16,7 +22,8 @@ const UserController = ({
   runAction, 
   collisionMap,
   interactMap,
-  idleAction
+  idleAction,
+  socket
 }) => {
 
   const inputDiv = React.createRef();
@@ -36,7 +43,8 @@ const UserController = ({
     if(zSpeed || xSpeed) {
       sprint ? runAction.play() : walkAction.play();
       if(sprint) idleAction.stop();
-      userObject.rotation.y = Math.atan2(xSpeed, zSpeed);
+      rotation = Math.atan2(xSpeed, zSpeed);
+      userObject.rotation.y = rotation;
     }
     else {
       walkAction.stop();
@@ -48,32 +56,36 @@ const UserController = ({
 
   const moveLoop = (lastTime) => {
     const current = Date.now();
-    const delta = current - lastTime;
-    const newOffset = {z: 0, x: 0};
-    if(zSpeed) { 
-      newOffset.z = (delta / 1000) * (xSpeed ? zSpeed * 1/Math.sqrt(2) : zSpeed) * (sprint ? 4 : 1);
-    }
-    if(xSpeed) {
-      newOffset.x = (delta / 1000) * (zSpeed ? xSpeed * 1/Math.sqrt(2) : xSpeed) * (sprint ? 4 : 1);
-    }
+    gait = zSpeed || xSpeed ? (sprint ? 1 : 0.25) : 0;
+    if (gait) {
+      const delta = current - lastTime;
+      const distance = speed * gait * delta / 1000;
+      const newOffset = { z: 0, x: 0 };
+      newOffset.x = Math.sin(rotation) * distance;
+      newOffset.z = Math.cos(rotation) * distance;
 
-    if(zSpeed || xSpeed) {
       const newPosition = {
-        x: userObject.position.x + newOffset.x, 
+        x: userObject.position.x + newOffset.x,
         z: userObject.position.z + newOffset.z
       };
 
-      if(collisionMap.isOpen(newPosition)) {
+      if (collisionMap.isOpen(newPosition)) {
         userObject.position.z += newOffset.z;
         userObject.position.x += newOffset.x;
         camera.position.x += newOffset.x;
         camera.position.z += newOffset.z;
       }
+      else {
+        gait = 0;
+        walkAction.stop();
+      }
     }
     else {
+      gait = 0;
       walkAction.stop();
     }
-    setTimeout(()=>moveLoop(current), 20)
+    sendMoveUpdate();
+    setTimeout(() => moveLoop(current), 20)
   }
 
   const handleKeyDown = ({key}) => {
@@ -120,6 +132,15 @@ const UserController = ({
     }
     if(key.toLowerCase() === "d") {
       xSpeed = 0;
+    }
+  }
+
+  const sendMoveUpdate = () =>  {
+    const facing = rotation;
+    if(lastGait !== gait || lastFacing !== facing) {
+      lastGait = gait;
+      lastFacing = facing;
+      socket.onMove({gait, facing});
     }
   }
 
