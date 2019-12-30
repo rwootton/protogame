@@ -1,0 +1,15 @@
+.loginInfo {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 200px;
+  color: #FFFFFF;
+}
+
+.actionText {
+  display: inline-block;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 11px;
+  padding-left: 16px;
+}

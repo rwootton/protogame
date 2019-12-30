@@ -8,7 +8,7 @@ const Light = ({scene}) => {
     const pointLight = new PointLight('#FFFFFF', 0.8);
     const ambientLight = new AmbientLight(null, 0.3);
     //  X, Y, Z
-    pointLight.position.set(-300, 5000, 300);
+    pointLight.position.set(-600, 5000, 300);
     pointLight.castShadow = true;
     pointLight.shadow.camera.near = 1;
     pointLight.shadow.camera.far = 50000;

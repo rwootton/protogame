@@ -2,6 +2,7 @@ import React, { useMemo, useReducer, useState, useEffect } from 'react';
 
 import CharacterPreview from './CharacterPreview';
 import SlotChanger from './SlotChanger';
+import Input from './components/Input';
 import { Scene, Mesh } from 'three';
 import usePlayer from '../character/Player/usePlayer';
 import './CharacterCreation.css';
@@ -26,10 +27,10 @@ const reducer = (colorMap, {key, color}) => {
 const CharacterCreation = ({
   width,
   height,
+  user,
   onClose
 }) => {
-  const localStorage = window.localStorage;
-  const [colorMap, changeColor] = useReducer(reducer, {});
+  const [colorMap, changeColor] = useReducer(reducer, user && user.playerCharacter || {});
   const [scene, setScene] = useState(null);
   const [player] = usePlayer(scene, colorMap);
 
@@ -90,7 +91,14 @@ const CharacterCreation = ({
   }
 
   const onSave = () => {
-    localStorage.setItem('colorMap', JSON.stringify(colorMap));
+    fetch('/~rakel/protogame/api/v1/player-characters', {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(colorMap)
+    }).then((response)=>response.json())
     onClose();
   }
 
@@ -119,6 +127,8 @@ const CharacterCreation = ({
           onChangeVariation={onChangeVariation}
         />
       })}
+      {"Name"}
+      <Input value={colorMap.name} onChange={(value)=>changeColor({key: 'name', color: value})} />
       <div className="buttons">
         <div className="button" onClick={randomizeColorMap}>
           Randomize

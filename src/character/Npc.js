@@ -68,6 +68,7 @@ const Npc = ({
 
   useEffect(()=>{
     if(scene && characterFile && (position || gait)) {
+      console.log({x: position.x, z: position.z})
       characterFile.scene.position.x = position.x;
       characterFile.scene.position.y = position.y;
       characterFile.scene.position.z = position.z;

@@ -36,7 +36,8 @@ const useSocket = ({onTick}) => {
 
   const onMove = ({gait, facing}) => {
     const control = new ControlDto();
-    const tick = Math.round(new Date().getTime() / 8) - 12;
+    const tick = 0;
+    // const tick = Math.round(new Date().getTime() / 8);
     control.setTick(tick)
     const gaitDto = new ControlGaitDto();
     gaitDto.setHeading(facing);
@@ -57,7 +58,8 @@ const useSocket = ({onTick}) => {
 
   const onAnimate = ({animation}) => {
     const control = new ControlDto();
-    const tick = Math.round(new Date().getTime() / 8);
+    const tick = 0;
+    // const tick = Math.round(new Date().getTime() / 8);
     control.setTick(tick)
     const animate = new ControlAnimateDto();
     animate.setAnimation(animation);

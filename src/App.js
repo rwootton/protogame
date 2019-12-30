@@ -2,37 +2,47 @@ import React, { useState, useEffect } from 'react';
 import World from './common/World';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import CharacterCreation from './ui/CharacterCreation';
+import Login from './client/login/Login';
+import Spinner from './ui/components/Spinner'
+import { getUser } from './client/User';
 
 const App = () => {
   const localStorage = window.localStorage;
-  const [colorMap, setColorMap] = useState(null);
+  const user = getUser();
+  const [loggedIn, setLoggedIn] = useState(!!user.id);
+  const [loading, setLoading] = useState(!!user.fetching);
 
-  useEffect(()=>{
-    getColorMap();
-  }, [])
-
-  const getColorMap = () => {
-    try {
-      if(localStorage.getItem('colorMap')) {
-        setColorMap(JSON.parse(localStorage.getItem('colorMap')));
-      }
-    }
-    catch(e) {
-      console.error('error parsing colormap', e)
-    }
+  if(user.fetching) {
+    user.fetching.then(()=>{
+      setLoading(false);
+      setLoggedIn(true);
+    }, ()=>{
+      setLoading(false);
+    })
   }
+
+  if(loading) return <Spinner />
+  if (!loggedIn) return (
+    <Login 
+      onClose={() => {
+        setLoading(true);
+        user.retrieveUser().then(()=>{
+          setLoggedIn(true)
+        });
+      }}
+  />)
 
   return (
     <AutoSizer>
       {({ height, width }) => {
-        if(!colorMap) {
+        if(!user.playerCharacter) {
           return <CharacterCreation 
             height={height} 
             width={width} 
-            onClose={getColorMap} />
+            onClose={()=>{}} />
         }
         return <World
-          colorMap={colorMap}
+          user={user}
           height={height}
           width={width}>
         </World>

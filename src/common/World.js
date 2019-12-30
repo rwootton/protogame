@@ -10,18 +10,17 @@ import {
 import usePlayer from '../character/Player/usePlayer';
 import UserController from './UserController';
 import Light from './Light';
-import Tree from './Tree';
 import Field from './Field'
 import Ground from './Ground'
-import Cat from './Cat';
 import PickFlowers from './PickFlowers';
 import CollisionMap from './CollisionMap';
 import InteractMap from './InteractMap';
 import useSocket  from '../client/NivelSocket';
 import Npc from '../character/Npc';
+import LoginInfo from '../ui/LoginInfo';
 import { GidTypeMap } from './constants/GidTypes';
 
-const World = ({ height, width, colorMap }) => {
+const World = ({ height, width, user }) => {
   const mountPoint = React.createRef();
 
   const [collisionMap, setCollisionMap] = useState(null);
@@ -33,7 +32,7 @@ const World = ({ height, width, colorMap }) => {
 
   const [serverEntities, setServerEntities] = useState([]);
 
-  const [player, mixer, actions] = usePlayer(scene, colorMap);
+  const [player, mixer, actions] = usePlayer(scene, user.playerCharacter);
 
   const animate = () => {
     requestAnimationFrame(animate);
@@ -101,6 +100,7 @@ const World = ({ height, width, colorMap }) => {
       actions={actions}
       mixer={mixer}
       camera={camera}>
+      <LoginInfo user={user} />
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
         <Ground scene={scene} />
         <Light scene={scene} />
