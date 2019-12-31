@@ -21,7 +21,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://www.randalloveson.com",
   "eslintConfig": {
     "ignorePatterns": "proto/"
   },
