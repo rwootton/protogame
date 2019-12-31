@@ -32,6 +32,7 @@ const App = () => {
       onClose={() => {
         setLoading(true);
         user.retrieveUser().then(()=>{
+          setLoading(false);
           setLoggedIn(true)
         });
       }}
