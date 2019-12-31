@@ -9,7 +9,6 @@ const Tulip = (props) => {
         const {x, y, z} = props.position;
         const {id} = props;
         interactMap.add({x, y, z, radius: 200, id});
-        console.log({interactMap})
       }
   }, [scene, interactMap])
 

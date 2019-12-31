@@ -7,16 +7,13 @@ import {
   PCFSoftShadowMap,
   Color
 } from 'three';
-import usePlayer from '../character/Player/usePlayer';
 import UserController from './UserController';
 import Light from './Light';
 import Field from './Field'
 import Ground from './Ground'
-import PickFlowers from './PickFlowers';
 import CollisionMap from './CollisionMap';
 import InteractMap from './InteractMap';
 import useSocket  from '../client/NivelSocket';
-import Npc from '../character/Npc';
 import LoginInfo from '../ui/LoginInfo';
 import { GidTypeMap } from './constants/GidTypes';
 
@@ -32,21 +29,20 @@ const World = ({ height, width, user }) => {
   const [scene, setScene] = useState(null);
   const [camera, setCamera] = useState(null);
   const [renderer, setRenderer] = useState(null);
-  const [clock, setClock] = useState(null);
 
   const [serverEntities, updateServerEntity] = useReducer(serverEntityReducer, {});
 
   const onTick = ({entity}) => {
-    if(entity) updateServerEntity(entity);
+    if(entity){
+      updateServerEntity(entity);
+    }
   }
 
   const socket = useSocket({onTick, user});
 
-  const [player, mixer, actions] = usePlayer(scene, user.playerCharacter);
 
   const animate = () => {
     requestAnimationFrame(animate);
-    if(mixer) mixer.update(clock.getDelta());
     if(renderer) renderer.render(scene, camera);
   }
 
@@ -58,7 +54,6 @@ const World = ({ height, width, user }) => {
     setScene(scene);
     setCamera(new PerspectiveCamera(45, width / height, 1, 10000));
     setRenderer(new WebGLRenderer())
-    setClock(new Clock());
     return () => {
       if (mountPoint && mountPoint.current) mountPoint.current.innerHTML = "";
       if (scene) scene.dispose();
@@ -83,20 +78,8 @@ const World = ({ height, width, user }) => {
     camera.position.y = 1000;
     camera.rotation.x = 1.8*Math.PI;
     renderer.setSize(width, height);
+    animate();
   }, [renderer, camera])
-
-  useEffect(()=>{
-    if(mixer) {
-      animate();
-    }
-
-  }, [mixer]);
-
-  // useEffect(()=> {
-  //   if(socket) {
-  //     setInteractMap(new InteractMap(socket));
-  //   }
-  // }, [socket])
 
   return (
     <UserController
@@ -104,9 +87,8 @@ const World = ({ height, width, user }) => {
       collisionMap={collisionMap}
       interactMap={interactMap}
       scene={scene}
-      userObject={player}
-      actions={actions}
-      mixer={mixer}
+      userObject={serverEntities[user.playerCharacter.id]}
+      onUpdateUser={updateServerEntity}
       camera={camera}>
       <LoginInfo user={user} />
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
@@ -125,20 +107,10 @@ const World = ({ height, width, user }) => {
               radius={collidable && colRad || 0}
               animation={animation}
               gait={gait}
+              camera={id===user.playerCharacter.id && camera}
               interactMap={takeable && interactMap}
             />
           }
-          // return <Npc 
-          //   key={id}
-          //   collisionMap={collisionMap}
-          //   scene={scene}
-          //   position={{x: posX, y: posY, z: posZ}} 
-          //   animation={animation}
-          //   rotation={{y: facing}}
-          //   color={'#99ccee'}
-          //   radius={0}
-          //   gait={gait}
-          // />
           return null;
         })}
         <Field

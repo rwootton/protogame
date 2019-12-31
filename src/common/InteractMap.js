@@ -6,7 +6,6 @@ class InteractMap {
   }
 
   add = ({x, z, radius, id}) => {
-    console.log({x,z,radius,id})
     this.objects[id] = {x, z, radius, id};
   }
 
@@ -15,7 +14,6 @@ class InteractMap {
   }
 
   getInteractObject = ({x, z}) => {
-    const userRadius = 30;
     const entity = Object.values(this.objects).find(
       (obj)=>{
         return (x > obj.x-obj.radius && x < obj.x+obj.radius) && (z > obj.z-obj.radius && z < obj.z+obj.radius);

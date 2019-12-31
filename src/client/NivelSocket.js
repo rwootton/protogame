@@ -14,7 +14,7 @@ const useSocket = ({onTick, user}) => {
     socket.onopen = e=>{
       console.log('open', e)
       const message = new ClientMsgDto();
-      message.setIam(user.id);
+      message.setIam(user.playerCharacter.id);
       sendMessage(message);
     }
     socket.onmessage = e=>{
@@ -27,7 +27,6 @@ const useSocket = ({onTick, user}) => {
           offset += size;
           const message = ServerMsgDto.deserializeBinary(binary).toObject();
           onTick(message)
-          console.log({message})
         }
 
       })

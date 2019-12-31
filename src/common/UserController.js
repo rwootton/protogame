@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import * as _ from 'lodash';
-import { playerAnimations } from '../character/constants/AnimationConstants';
 
 const speed = 800;
 
@@ -19,83 +18,20 @@ let lastFacing = 0;
 
 const UserController = ({
   userObject, 
-  actions,
   camera, 
   children, 
   collisionMap,
   interactMap,
+  onUpdateUser,
   socket
 }) => {
 
   const inputDiv = React.createRef();
   inputDiv && inputDiv.current &&  inputDiv.current.focus();
 
-  useEffect(()=>{
-    if(userObject) {
-      moveLoop(Date.now());
-      requestAnimationFrame(animate);
-    }
-
-    return () => {
-    }
-  }, [userObject])
-
-  const animate = () => {
-    if(xSpeed || zSpeed) {
-      rotation = Math.atan2(xSpeed, zSpeed);
-      userObject.rotation.y = rotation;
-    }
-    const currentAnimation = playerAnimations[animation];
-    Object.keys(actions).forEach(key=>{
-      if(currentAnimation === key) {
-        actions[key].play();
-      }
-      else {
-        actions[key].stop();
-      }
-    }) 
-    requestAnimationFrame(animate);
-  }
-
-  const moveLoop = (lastTime) => {
-    const current = Date.now();
-    gait = zSpeed || xSpeed ? (sprint ? 1 : 0.25) : 0;
-    animation = zSpeed || xSpeed ? (sprint ? 3 : 2) : 1;
-    if (gait) {
-      const delta = current - lastTime;
-      const distance = speed * gait * delta / 1000;
-      const newOffset = { z: 0, x: 0 };
-      newOffset.x = Math.sin(rotation) * distance;
-      newOffset.z = Math.cos(rotation) * distance;
-
-      const newPosition = {
-        x: userObject.position.x + newOffset.x,
-        z: userObject.position.z + newOffset.z
-      };
-
-      if (collisionMap.isOpen(newPosition)) {
-        userObject.position.z += newOffset.z;
-        userObject.position.x += newOffset.x;
-        camera.position.x += newOffset.x;
-        camera.position.z += newOffset.z;
-      }
-      else {
-        gait = 0;
-        actions.walk.stop();
-      }
-    }
-    else {
-      gait = 0;
-      actions.walk.stop();
-    }
-    sendMoveUpdate();
-    setTimeout(() => moveLoop(current), 20)
-  }
-
   const handleKeyDown = ({key}) => {
     if(key.toLowerCase() === 'shift') {
       sprint = true;
-      actions.walk.stop();
     }
     if(key.toLowerCase() === 'm') {
       console.log({userObject})
@@ -118,12 +54,12 @@ const UserController = ({
         availableInteraction.onInteract();
       }
     }
+    sendMoveUpdate();
   }
 
   const handleKeyUp = ({key}) => {
     if(key.toLowerCase() === 'shift') {
       sprint = false;
-      actions.run.stop();
     }
     if(key.toLowerCase() === "w" && zSpeed === -speed) {
       zSpeed = 0;
@@ -137,14 +73,19 @@ const UserController = ({
     if(key.toLowerCase() === "d" && xSpeed === speed) {
       xSpeed = 0;
     }
+    sendMoveUpdate();
   }
 
   const sendMoveUpdate = () =>  {
+    gait = zSpeed || xSpeed ? (sprint ? 1 : 0.25) : 0;
+    animation = zSpeed || xSpeed ? (sprint ? 3 : 2) : 1;
+    if(gait) rotation = Math.atan2(xSpeed, zSpeed);
     const facing = rotation;
     if(lastGait !== gait || lastFacing !== facing) {
       lastGait = gait;
       lastFacing = facing;
       socket.onMove({gait, facing});
+      // onUpdateUser({...userObject, gait, facing, heading: facing});
     }
 
     if(lastAnimation !== animation) {

@@ -1,32 +1,50 @@
 import React, {useEffect, useState} from 'react';
 import { MeshToonMaterial, Mesh, AnimationMixer, Clock } from 'three';
 import useAsset from '../common/useAsset'
-import { playerAnimations } from '../character/constants/AnimationConstants';
+import { playerAnimations } from './constants/AnimationConstants';
 
 const SCALE = 100;
 let session;
 
-const Npc = ({
+const PlayerCharacter = ({
   position, 
   rotation, 
-  color, 
   scene, 
   collisionMap, 
   radius,
   animation,
-  gait
+  gait,
+  camera,
+  id
 }) => {
   const characterFile = useAsset({file: 'assets/elf-test.glb'});
   const [actions, setActions] = useState(null);
+  const [playerCharacter, setPlayerCharacter] = useState(null);
+
   useEffect(()=>{
-    if(scene && characterFile) {
+    fetch(`/~rakel/protogame/api/v1/player-characters/${id}`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then((response)=>response.json()).then((character)=>{
+      setPlayerCharacter(character)
+    })
+  },[])
+
+  useEffect(()=>{
+    if(scene && characterFile && playerCharacter) {
       const character = characterFile.scene;
-      const material = new MeshToonMaterial({color})
-      material.skinning = true;
       character.traverse((child)=>{
         if(child instanceof Mesh) {
-          child.material = material;
-          child.castShadow = true;
+          if(!playerCharacter[child.name]) {
+            child.visible = false;
+          }
+          else {
+            const toonMaterial = new MeshToonMaterial({color: playerCharacter[child.name]})
+            toonMaterial.skinning = true;
+            child.castShadow = true;
+            child.material = toonMaterial;
+          }
         }
       })
       if(position) {
@@ -64,13 +82,17 @@ const Npc = ({
         scene.remove(characterFile.scene)
       };
     }
-  }, [scene, characterFile])
+  }, [scene, characterFile, playerCharacter])
 
   useEffect(()=>{
     if(scene && characterFile && (position || gait)) {
       characterFile.scene.position.x = position.x;
       characterFile.scene.position.y = position.y;
       characterFile.scene.position.z = position.z;
+      if(camera) {
+        camera.position.x = position.x;
+        camera.position.z = position.z + 1260;
+      }
       session = Date.now();
       let movePredict;
       if(gait) {
@@ -82,6 +104,10 @@ const Npc = ({
           const distance = 800 * gait * delta / 1000;
           characterFile.scene.position.x += Math.sin(heading) * distance;
           characterFile.scene.position.z += Math.cos(heading) * distance;
+          if(camera) {
+            camera.position.x += Math.sin(heading) * distance;
+            camera.position.z += Math.cos(heading) * distance;
+          }
           setTimeout(()=>movePredict(current, localSession));
         }
         movePredict(Date.now(), session);
@@ -114,4 +140,4 @@ const Npc = ({
   return <></>
 }
 
-export default Npc;
+export default PlayerCharacter;
