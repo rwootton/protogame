@@ -13,9 +13,14 @@ const App = () => {
   const [loading, setLoading] = useState(!!user.fetching);
 
   if(user.fetching) {
-    user.fetching.then(()=>{
-      setLoading(false);
-      setLoggedIn(true);
+    user.fetching.then((resp)=>{
+      if(user.id) {
+        setLoading(false);
+        setLoggedIn(true);
+      }
+      else {
+        setLoading(false);
+      }
     }, ()=>{
       setLoading(false);
     })
