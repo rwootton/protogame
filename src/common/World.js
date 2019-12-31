@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { 
   Scene, 
   WebGLRenderer, 
@@ -20,6 +20,10 @@ import Npc from '../character/Npc';
 import LoginInfo from '../ui/LoginInfo';
 import { GidTypeMap } from './constants/GidTypes';
 
+const serverEntityReducer = (state, entity) => {
+  return {...state, [entity.id]: entity};
+}
+
 const World = ({ height, width, user }) => {
   const mountPoint = React.createRef();
 
@@ -30,7 +34,13 @@ const World = ({ height, width, user }) => {
   const [renderer, setRenderer] = useState(null);
   const [clock, setClock] = useState(null);
 
-  const [serverEntities, setServerEntities] = useState([]);
+  const [serverEntities, updateServerEntity] = useReducer(serverEntityReducer, {});
+
+  const onTick = ({entity}) => {
+    if(entity) updateServerEntity(entity);
+  }
+
+  const socket = useSocket({onTick, user});
 
   const [player, mixer, actions] = usePlayer(scene, user.playerCharacter);
 
@@ -40,9 +50,9 @@ const World = ({ height, width, user }) => {
     if(renderer) renderer.render(scene, camera);
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     setCollisionMap(new CollisionMap());
-    setInteractMap(new InteractMap());
+    setInteractMap(new InteractMap(socket));
     const scene = new Scene();
     scene.background = new Color('#8C8CD0')
     setScene(scene);
@@ -50,9 +60,9 @@ const World = ({ height, width, user }) => {
     setRenderer(new WebGLRenderer())
     setClock(new Clock());
     return () => {
-      if(mountPoint && mountPoint.current) mountPoint.current.innerHTML = "";
-      if(scene) scene.dispose();
-      if(renderer) renderer.dispose();
+      if (mountPoint && mountPoint.current) mountPoint.current.innerHTML = "";
+      if (scene) scene.dispose();
+      if (renderer) renderer.dispose();
     }
   }, [])
 
@@ -82,13 +92,11 @@ const World = ({ height, width, user }) => {
 
   }, [mixer]);
 
-  const onTick = (entities) => {
-    if(entities) {
-      setServerEntities(entities)
-    }
-  }
-
-  const socket = useSocket({onTick});
+  // useEffect(()=> {
+  //   if(socket) {
+  //     setInteractMap(new InteractMap(socket));
+  //   }
+  // }, [socket])
 
   return (
     <UserController
@@ -104,31 +112,33 @@ const World = ({ height, width, user }) => {
       <div ref={mountPoint} style={{ width, height, overflow: 'hidden' }}>
         <Ground scene={scene} />
         <Light scene={scene} />
-        {serverEntities && serverEntities.map(({gid, posX, posY, posZ, collisionRadius, facing, animation, gait}, index)=>{
-          const EntityType = GidTypeMap[gid];
+        {serverEntities && Object.values(serverEntities).map(({type, id, posX, posY, posZ, colRad, facing, animation, gait, collidable, takeable}, index)=>{
+          const EntityType = GidTypeMap[type];
           if(EntityType) {
             return <EntityType 
+              id={id}
               collisionMap={collisionMap}
-              key={gid+''+index}
+              key={id+''+index}
               scene={scene}
               position={{x: posX, y: posY, z: posZ}} 
               rotation={{y: facing}}
-              radius={collisionRadius}
-            />
-          }
-          if(gid != socket.gid) {
-            return <Npc 
-              key={gid}
-              collisionMap={collisionMap}
-              scene={scene}
-              position={{x: posX, y: posY, z: posZ}} 
+              radius={collidable && colRad || 0}
               animation={animation}
-              rotation={{y: facing}}
-              color={'#99ccee'}
-              radius={0}
               gait={gait}
+              interactMap={takeable && interactMap}
             />
           }
+          // return <Npc 
+          //   key={id}
+          //   collisionMap={collisionMap}
+          //   scene={scene}
+          //   position={{x: posX, y: posY, z: posZ}} 
+          //   animation={animation}
+          //   rotation={{y: facing}}
+          //   color={'#99ccee'}
+          //   radius={0}
+          //   gait={gait}
+          // />
           return null;
         })}
         <Field
@@ -142,10 +152,6 @@ const World = ({ height, width, user }) => {
           radius={500}
           count={100}
           startPosition={{ x: 600, z: -1300 }}
-        />
-        <PickFlowers
-          scene={scene}
-          interactMap={interactMap}
         />
       </div>
     </UserController>

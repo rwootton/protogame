@@ -9,6 +9,7 @@ const Tree = (props) => {
     file={'assets/tree2.glb'}
     castShadow={false}
     colorMap={{leaves: '#87C771', trunk: '#7A5340'}}
+    color={'#87C771'}
     {...props}
   />;
 }

@@ -11,7 +11,7 @@ const PickFlowers = ({
 }) => {
   // persistent state coming soon*
   const [tulips, dispatch] = useReducer(reducer, [
-    {x: -140, z: -1500, y: 20, rotate: 0.33, id: 0}, 
+    // {x: -140, z: -1500, y: 20, rotate: 0.33, id: 0}, 
     {x: -180, z: -800, y: 20, rotate: 1.5, id: 1}, 
     {x: -200, z: -700, y: 20, rotate: 2, id: 2}, 
     {x: -500, z: -400, y: 20, rotate: 0.76, id: 3},
