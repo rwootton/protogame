@@ -64,22 +64,22 @@ proto.EntityDto.prototype.toObject = function(opt_includeInstance) {
  */
 proto.EntityDto.toObject = function(includeInstance, msg) {
   var f, obj = {
-    type: jspb.Message.getField(msg, 2),
-    id: jspb.Message.getField(msg, 3),
-    posX: +jspb.Message.getField(msg, 4),
-    posY: +jspb.Message.getField(msg, 5),
-    posZ: +jspb.Message.getField(msg, 6),
-    colRad: +jspb.Message.getField(msg, 7),
-    speed: +jspb.Message.getField(msg, 8),
-    heading: +jspb.Message.getField(msg, 9),
-    facing: +jspb.Message.getField(msg, 10),
-    gait: +jspb.Message.getField(msg, 11),
-    animStart: jspb.Message.getField(msg, 12),
-    animation: jspb.Message.getField(msg, 13),
-    pc: jspb.Message.getField(msg, 14),
-    collides: jspb.Message.getField(msg, 15),
-    collidable: jspb.Message.getField(msg, 16),
-    takeable: jspb.Message.getField(msg, 17)
+    type: jspb.Message.getField(msg, 1),
+    id: jspb.Message.getField(msg, 2),
+    posX: +jspb.Message.getField(msg, 3),
+    posY: +jspb.Message.getField(msg, 4),
+    posZ: +jspb.Message.getField(msg, 5),
+    colRad: +jspb.Message.getField(msg, 6),
+    speed: +jspb.Message.getField(msg, 7),
+    heading: +jspb.Message.getField(msg, 8),
+    facing: +jspb.Message.getField(msg, 9),
+    gait: +jspb.Message.getField(msg, 10),
+    animStart: jspb.Message.getField(msg, 11),
+    animation: jspb.Message.getField(msg, 12),
+    pc: jspb.Message.getField(msg, 13),
+    collides: jspb.Message.getField(msg, 14),
+    collidable: jspb.Message.getField(msg, 15),
+    takeable: jspb.Message.getField(msg, 16)
   };
 
   if (includeInstance) {
@@ -116,67 +116,67 @@ proto.EntityDto.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 2:
-      var value = /** @type {number} */ (reader.readInt64());
+    case 1:
+      var value = /** @type {number} */ (reader.readSfixed64());
       msg.setType(value);
       break;
-    case 3:
-      var value = /** @type {number} */ (reader.readInt64());
+    case 2:
+      var value = /** @type {number} */ (reader.readSfixed64());
       msg.setId(value);
       break;
-    case 4:
+    case 3:
       var value = /** @type {number} */ (reader.readDouble());
       msg.setPosX(value);
       break;
-    case 5:
+    case 4:
       var value = /** @type {number} */ (reader.readDouble());
       msg.setPosY(value);
       break;
-    case 6:
+    case 5:
       var value = /** @type {number} */ (reader.readDouble());
       msg.setPosZ(value);
       break;
-    case 7:
+    case 6:
       var value = /** @type {number} */ (reader.readDouble());
       msg.setColRad(value);
       break;
-    case 8:
+    case 7:
       var value = /** @type {number} */ (reader.readDouble());
       msg.setSpeed(value);
       break;
-    case 9:
+    case 8:
       var value = /** @type {number} */ (reader.readDouble());
       msg.setHeading(value);
       break;
-    case 10:
+    case 9:
       var value = /** @type {number} */ (reader.readDouble());
       msg.setFacing(value);
       break;
-    case 11:
+    case 10:
       var value = /** @type {number} */ (reader.readDouble());
       msg.setGait(value);
       break;
-    case 12:
-      var value = /** @type {number} */ (reader.readInt64());
+    case 11:
+      var value = /** @type {number} */ (reader.readSfixed64());
       msg.setAnimStart(value);
       break;
-    case 13:
-      var value = /** @type {number} */ (reader.readUint32());
+    case 12:
+      var value = /** @type {number} */ (reader.readFixed32());
       msg.setAnimation(value);
       break;
-    case 14:
+    case 13:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setPc(value);
       break;
-    case 15:
+    case 14:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setCollides(value);
       break;
-    case 16:
+    case 15:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setCollidable(value);
       break;
-    case 17:
+    case 16:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setTakeable(value);
       break;
@@ -218,16 +218,23 @@ proto.EntityDto.prototype.serializeBinary = function() {
  */
 proto.EntityDto.prototype.serializeBinaryToWriter = function (writer) {
   var f = undefined;
+  f = jspb.Message.getField(this, 1);
+  if (f != null) {
+    writer.writeSfixed64(
+      1,
+      f
+    );
+  }
   f = jspb.Message.getField(this, 2);
   if (f != null) {
-    writer.writeInt64(
+    writer.writeSfixed64(
       2,
       f
     );
   }
   f = jspb.Message.getField(this, 3);
   if (f != null) {
-    writer.writeInt64(
+    writer.writeDouble(
       3,
       f
     );
@@ -283,21 +290,21 @@ proto.EntityDto.prototype.serializeBinaryToWriter = function (writer) {
   }
   f = jspb.Message.getField(this, 11);
   if (f != null) {
-    writer.writeDouble(
+    writer.writeSfixed64(
       11,
       f
     );
   }
   f = jspb.Message.getField(this, 12);
   if (f != null) {
-    writer.writeInt64(
+    writer.writeFixed32(
       12,
       f
     );
   }
   f = jspb.Message.getField(this, 13);
   if (f != null) {
-    writer.writeUint32(
+    writer.writeBool(
       13,
       f
     );
@@ -323,13 +330,6 @@ proto.EntityDto.prototype.serializeBinaryToWriter = function (writer) {
       f
     );
   }
-  f = jspb.Message.getField(this, 17);
-  if (f != null) {
-    writer.writeBool(
-      17,
-      f
-    );
-  }
 };
 
 
@@ -343,22 +343,22 @@ proto.EntityDto.prototype.cloneMessage = function() {
 
 
 /**
- * required int64 type = 2;
+ * required sfixed64 type = 1;
  * @return {number}
  */
 proto.EntityDto.prototype.getType = function() {
-  return /** @type {number} */ (!this.hasType() ? 0 : jspb.Message.getField(this, 2));
+  return /** @type {number} */ (!this.hasType() ? 0 : jspb.Message.getField(this, 1));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setType = function(value) {
-  jspb.Message.setField(this, 2, value);
+  jspb.Message.setField(this, 1, value);
 };
 
 
 proto.EntityDto.prototype.clearType = function() {
-  jspb.Message.setField(this, 2, undefined);
+  jspb.Message.setField(this, 1, undefined);
 };
 
 
@@ -367,27 +367,27 @@ proto.EntityDto.prototype.clearType = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasType = function() {
-  return jspb.Message.getField(this, 2) != null;
+  return jspb.Message.getField(this, 1) != null;
 };
 
 
 /**
- * required int64 id = 3;
+ * required sfixed64 id = 2;
  * @return {number}
  */
 proto.EntityDto.prototype.getId = function() {
-  return /** @type {number} */ (!this.hasId() ? 0 : jspb.Message.getField(this, 3));
+  return /** @type {number} */ (!this.hasId() ? 0 : jspb.Message.getField(this, 2));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setId = function(value) {
-  jspb.Message.setField(this, 3, value);
+  jspb.Message.setField(this, 2, value);
 };
 
 
 proto.EntityDto.prototype.clearId = function() {
-  jspb.Message.setField(this, 3, undefined);
+  jspb.Message.setField(this, 2, undefined);
 };
 
 
@@ -396,27 +396,27 @@ proto.EntityDto.prototype.clearId = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasId = function() {
-  return jspb.Message.getField(this, 3) != null;
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * required double pos_x = 4;
+ * required double pos_x = 3;
  * @return {number}
  */
 proto.EntityDto.prototype.getPosX = function() {
-  return /** @type {number} */ (!this.hasPosX() ? 0.0 : +jspb.Message.getField(this, 4));
+  return /** @type {number} */ (!this.hasPosX() ? 0.0 : +jspb.Message.getField(this, 3));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setPosX = function(value) {
-  jspb.Message.setField(this, 4, value);
+  jspb.Message.setField(this, 3, value);
 };
 
 
 proto.EntityDto.prototype.clearPosX = function() {
-  jspb.Message.setField(this, 4, undefined);
+  jspb.Message.setField(this, 3, undefined);
 };
 
 
@@ -425,27 +425,27 @@ proto.EntityDto.prototype.clearPosX = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasPosX = function() {
-  return jspb.Message.getField(this, 4) != null;
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * required double pos_y = 5;
+ * required double pos_y = 4;
  * @return {number}
  */
 proto.EntityDto.prototype.getPosY = function() {
-  return /** @type {number} */ (!this.hasPosY() ? 0.0 : +jspb.Message.getField(this, 5));
+  return /** @type {number} */ (!this.hasPosY() ? 0.0 : +jspb.Message.getField(this, 4));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setPosY = function(value) {
-  jspb.Message.setField(this, 5, value);
+  jspb.Message.setField(this, 4, value);
 };
 
 
 proto.EntityDto.prototype.clearPosY = function() {
-  jspb.Message.setField(this, 5, undefined);
+  jspb.Message.setField(this, 4, undefined);
 };
 
 
@@ -454,27 +454,27 @@ proto.EntityDto.prototype.clearPosY = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasPosY = function() {
-  return jspb.Message.getField(this, 5) != null;
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * required double pos_z = 6;
+ * required double pos_z = 5;
  * @return {number}
  */
 proto.EntityDto.prototype.getPosZ = function() {
-  return /** @type {number} */ (!this.hasPosZ() ? 0.0 : +jspb.Message.getField(this, 6));
+  return /** @type {number} */ (!this.hasPosZ() ? 0.0 : +jspb.Message.getField(this, 5));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setPosZ = function(value) {
-  jspb.Message.setField(this, 6, value);
+  jspb.Message.setField(this, 5, value);
 };
 
 
 proto.EntityDto.prototype.clearPosZ = function() {
-  jspb.Message.setField(this, 6, undefined);
+  jspb.Message.setField(this, 5, undefined);
 };
 
 
@@ -483,27 +483,27 @@ proto.EntityDto.prototype.clearPosZ = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasPosZ = function() {
-  return jspb.Message.getField(this, 6) != null;
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
 /**
- * required double col_rad = 7;
+ * required double col_rad = 6;
  * @return {number}
  */
 proto.EntityDto.prototype.getColRad = function() {
-  return /** @type {number} */ (!this.hasColRad() ? 0.0 : +jspb.Message.getField(this, 7));
+  return /** @type {number} */ (!this.hasColRad() ? 0.0 : +jspb.Message.getField(this, 6));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setColRad = function(value) {
-  jspb.Message.setField(this, 7, value);
+  jspb.Message.setField(this, 6, value);
 };
 
 
 proto.EntityDto.prototype.clearColRad = function() {
-  jspb.Message.setField(this, 7, undefined);
+  jspb.Message.setField(this, 6, undefined);
 };
 
 
@@ -512,27 +512,27 @@ proto.EntityDto.prototype.clearColRad = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasColRad = function() {
-  return jspb.Message.getField(this, 7) != null;
+  return jspb.Message.getField(this, 6) != null;
 };
 
 
 /**
- * required double speed = 8;
+ * required double speed = 7;
  * @return {number}
  */
 proto.EntityDto.prototype.getSpeed = function() {
-  return /** @type {number} */ (!this.hasSpeed() ? 0.0 : +jspb.Message.getField(this, 8));
+  return /** @type {number} */ (!this.hasSpeed() ? 0.0 : +jspb.Message.getField(this, 7));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setSpeed = function(value) {
-  jspb.Message.setField(this, 8, value);
+  jspb.Message.setField(this, 7, value);
 };
 
 
 proto.EntityDto.prototype.clearSpeed = function() {
-  jspb.Message.setField(this, 8, undefined);
+  jspb.Message.setField(this, 7, undefined);
 };
 
 
@@ -541,27 +541,27 @@ proto.EntityDto.prototype.clearSpeed = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasSpeed = function() {
-  return jspb.Message.getField(this, 8) != null;
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
 /**
- * required double heading = 9;
+ * required double heading = 8;
  * @return {number}
  */
 proto.EntityDto.prototype.getHeading = function() {
-  return /** @type {number} */ (!this.hasHeading() ? 0.0 : +jspb.Message.getField(this, 9));
+  return /** @type {number} */ (!this.hasHeading() ? 0.0 : +jspb.Message.getField(this, 8));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setHeading = function(value) {
-  jspb.Message.setField(this, 9, value);
+  jspb.Message.setField(this, 8, value);
 };
 
 
 proto.EntityDto.prototype.clearHeading = function() {
-  jspb.Message.setField(this, 9, undefined);
+  jspb.Message.setField(this, 8, undefined);
 };
 
 
@@ -570,27 +570,27 @@ proto.EntityDto.prototype.clearHeading = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasHeading = function() {
-  return jspb.Message.getField(this, 9) != null;
+  return jspb.Message.getField(this, 8) != null;
 };
 
 
 /**
- * required double facing = 10;
+ * required double facing = 9;
  * @return {number}
  */
 proto.EntityDto.prototype.getFacing = function() {
-  return /** @type {number} */ (!this.hasFacing() ? 0.0 : +jspb.Message.getField(this, 10));
+  return /** @type {number} */ (!this.hasFacing() ? 0.0 : +jspb.Message.getField(this, 9));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setFacing = function(value) {
-  jspb.Message.setField(this, 10, value);
+  jspb.Message.setField(this, 9, value);
 };
 
 
 proto.EntityDto.prototype.clearFacing = function() {
-  jspb.Message.setField(this, 10, undefined);
+  jspb.Message.setField(this, 9, undefined);
 };
 
 
@@ -599,27 +599,27 @@ proto.EntityDto.prototype.clearFacing = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasFacing = function() {
-  return jspb.Message.getField(this, 10) != null;
+  return jspb.Message.getField(this, 9) != null;
 };
 
 
 /**
- * required double gait = 11;
+ * required double gait = 10;
  * @return {number}
  */
 proto.EntityDto.prototype.getGait = function() {
-  return /** @type {number} */ (!this.hasGait() ? 0.0 : +jspb.Message.getField(this, 11));
+  return /** @type {number} */ (!this.hasGait() ? 0.0 : +jspb.Message.getField(this, 10));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setGait = function(value) {
-  jspb.Message.setField(this, 11, value);
+  jspb.Message.setField(this, 10, value);
 };
 
 
 proto.EntityDto.prototype.clearGait = function() {
-  jspb.Message.setField(this, 11, undefined);
+  jspb.Message.setField(this, 10, undefined);
 };
 
 
@@ -628,27 +628,27 @@ proto.EntityDto.prototype.clearGait = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasGait = function() {
-  return jspb.Message.getField(this, 11) != null;
+  return jspb.Message.getField(this, 10) != null;
 };
 
 
 /**
- * required int64 anim_start = 12;
+ * required sfixed64 anim_start = 11;
  * @return {number}
  */
 proto.EntityDto.prototype.getAnimStart = function() {
-  return /** @type {number} */ (!this.hasAnimStart() ? 0 : jspb.Message.getField(this, 12));
+  return /** @type {number} */ (!this.hasAnimStart() ? 0 : jspb.Message.getField(this, 11));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setAnimStart = function(value) {
-  jspb.Message.setField(this, 12, value);
+  jspb.Message.setField(this, 11, value);
 };
 
 
 proto.EntityDto.prototype.clearAnimStart = function() {
-  jspb.Message.setField(this, 12, undefined);
+  jspb.Message.setField(this, 11, undefined);
 };
 
 
@@ -657,27 +657,27 @@ proto.EntityDto.prototype.clearAnimStart = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasAnimStart = function() {
-  return jspb.Message.getField(this, 12) != null;
+  return jspb.Message.getField(this, 11) != null;
 };
 
 
 /**
- * required uint32 animation = 13;
+ * required fixed32 animation = 12;
  * @return {number}
  */
 proto.EntityDto.prototype.getAnimation = function() {
-  return /** @type {number} */ (!this.hasAnimation() ? 0 : jspb.Message.getField(this, 13));
+  return /** @type {number} */ (!this.hasAnimation() ? 0 : jspb.Message.getField(this, 12));
 };
 
 
 /** @param {number|undefined} value  */
 proto.EntityDto.prototype.setAnimation = function(value) {
-  jspb.Message.setField(this, 13, value);
+  jspb.Message.setField(this, 12, value);
 };
 
 
 proto.EntityDto.prototype.clearAnimation = function() {
-  jspb.Message.setField(this, 13, undefined);
+  jspb.Message.setField(this, 12, undefined);
 };
 
 
@@ -686,29 +686,29 @@ proto.EntityDto.prototype.clearAnimation = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasAnimation = function() {
-  return jspb.Message.getField(this, 13) != null;
+  return jspb.Message.getField(this, 12) != null;
 };
 
 
 /**
- * required bool pc = 14;
+ * required bool pc = 13;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
 proto.EntityDto.prototype.getPc = function() {
-  return /** @type {boolean} */ (!this.hasPc() ? false : jspb.Message.getField(this, 14));
+  return /** @type {boolean} */ (!this.hasPc() ? false : jspb.Message.getField(this, 13));
 };
 
 
 /** @param {boolean|undefined} value  */
 proto.EntityDto.prototype.setPc = function(value) {
-  jspb.Message.setField(this, 14, value);
+  jspb.Message.setField(this, 13, value);
 };
 
 
 proto.EntityDto.prototype.clearPc = function() {
-  jspb.Message.setField(this, 14, undefined);
+  jspb.Message.setField(this, 13, undefined);
 };
 
 
@@ -717,29 +717,29 @@ proto.EntityDto.prototype.clearPc = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasPc = function() {
-  return jspb.Message.getField(this, 14) != null;
+  return jspb.Message.getField(this, 13) != null;
 };
 
 
 /**
- * required bool collides = 15;
+ * required bool collides = 14;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
 proto.EntityDto.prototype.getCollides = function() {
-  return /** @type {boolean} */ (!this.hasCollides() ? false : jspb.Message.getField(this, 15));
+  return /** @type {boolean} */ (!this.hasCollides() ? false : jspb.Message.getField(this, 14));
 };
 
 
 /** @param {boolean|undefined} value  */
 proto.EntityDto.prototype.setCollides = function(value) {
-  jspb.Message.setField(this, 15, value);
+  jspb.Message.setField(this, 14, value);
 };
 
 
 proto.EntityDto.prototype.clearCollides = function() {
-  jspb.Message.setField(this, 15, undefined);
+  jspb.Message.setField(this, 14, undefined);
 };
 
 
@@ -748,29 +748,29 @@ proto.EntityDto.prototype.clearCollides = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasCollides = function() {
-  return jspb.Message.getField(this, 15) != null;
+  return jspb.Message.getField(this, 14) != null;
 };
 
 
 /**
- * required bool collidable = 16;
+ * required bool collidable = 15;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
 proto.EntityDto.prototype.getCollidable = function() {
-  return /** @type {boolean} */ (!this.hasCollidable() ? false : jspb.Message.getField(this, 16));
+  return /** @type {boolean} */ (!this.hasCollidable() ? false : jspb.Message.getField(this, 15));
 };
 
 
 /** @param {boolean|undefined} value  */
 proto.EntityDto.prototype.setCollidable = function(value) {
-  jspb.Message.setField(this, 16, value);
+  jspb.Message.setField(this, 15, value);
 };
 
 
 proto.EntityDto.prototype.clearCollidable = function() {
-  jspb.Message.setField(this, 16, undefined);
+  jspb.Message.setField(this, 15, undefined);
 };
 
 
@@ -779,29 +779,29 @@ proto.EntityDto.prototype.clearCollidable = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasCollidable = function() {
-  return jspb.Message.getField(this, 16) != null;
+  return jspb.Message.getField(this, 15) != null;
 };
 
 
 /**
- * required bool takeable = 17;
+ * required bool takeable = 16;
  * Note that Boolean fields may be set to 0/1 when serialized from a Java server.
  * You should avoid comparisons like {@code val === true/false} in those cases.
  * @return {boolean}
  */
 proto.EntityDto.prototype.getTakeable = function() {
-  return /** @type {boolean} */ (!this.hasTakeable() ? false : jspb.Message.getField(this, 17));
+  return /** @type {boolean} */ (!this.hasTakeable() ? false : jspb.Message.getField(this, 16));
 };
 
 
 /** @param {boolean|undefined} value  */
 proto.EntityDto.prototype.setTakeable = function(value) {
-  jspb.Message.setField(this, 17, value);
+  jspb.Message.setField(this, 16, value);
 };
 
 
 proto.EntityDto.prototype.clearTakeable = function() {
-  jspb.Message.setField(this, 17, undefined);
+  jspb.Message.setField(this, 16, undefined);
 };
 
 
@@ -810,7 +810,7 @@ proto.EntityDto.prototype.clearTakeable = function() {
  * @return{!boolean}
  */
 proto.EntityDto.prototype.hasTakeable = function() {
-  return jspb.Message.getField(this, 17) != null;
+  return jspb.Message.getField(this, 16) != null;
 };
 
 
@@ -1095,7 +1095,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.ActionDto.oneofGroups_ = [[3,4,5]];
+proto.ActionDto.oneofGroups_ = [[3,4,5,6]];
 
 /**
  * @enum {number}
@@ -1104,7 +1104,8 @@ proto.ActionDto.ActionCase = {
   ACTION_NOT_SET: 0,
   GAIT: 3,
   ANIMATE: 4,
-  TAKE: 5
+  TAKE: 5,
+  SAY: 6
 };
 
 /**
@@ -1146,7 +1147,8 @@ proto.ActionDto.toObject = function(includeInstance, msg) {
     actor: jspb.Message.getField(msg, 2),
     gait: (f = msg.getGait()) && proto.ActionGaitDto.toObject(includeInstance, f),
     animate: jspb.Message.getField(msg, 4),
-    take: jspb.Message.getField(msg, 5)
+    take: jspb.Message.getField(msg, 5),
+    say: jspb.Message.getField(msg, 6)
   };
 
   if (includeInstance) {
@@ -1184,11 +1186,11 @@ proto.ActionDto.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {number} */ (reader.readSfixed64());
       msg.setTick(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {number} */ (reader.readSfixed64());
       msg.setActor(value);
       break;
     case 3:
@@ -1197,12 +1199,16 @@ proto.ActionDto.deserializeBinaryFromReader = function(msg, reader) {
       msg.setGait(value);
       break;
     case 4:
-      var value = /** @type {number} */ (reader.readUint32());
+      var value = /** @type {number} */ (reader.readFixed32());
       msg.setAnimate(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {number} */ (reader.readSfixed64());
       msg.setTake(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSay(value);
       break;
     default:
       reader.skipField();
@@ -1244,14 +1250,14 @@ proto.ActionDto.prototype.serializeBinaryToWriter = function (writer) {
   var f = undefined;
   f = jspb.Message.getField(this, 1);
   if (f != null) {
-    writer.writeInt64(
+    writer.writeSfixed64(
       1,
       f
     );
   }
   f = jspb.Message.getField(this, 2);
   if (f != null) {
-    writer.writeInt64(
+    writer.writeSfixed64(
       2,
       f
     );
@@ -1266,15 +1272,22 @@ proto.ActionDto.prototype.serializeBinaryToWriter = function (writer) {
   }
   f = jspb.Message.getField(this, 4);
   if (f != null) {
-    writer.writeUint32(
+    writer.writeFixed32(
       4,
       f
     );
   }
   f = jspb.Message.getField(this, 5);
   if (f != null) {
-    writer.writeInt64(
+    writer.writeSfixed64(
       5,
+      f
+    );
+  }
+  f = jspb.Message.getField(this, 6);
+  if (f != null) {
+    writer.writeString(
+      6,
       f
     );
   }
@@ -1291,7 +1304,7 @@ proto.ActionDto.prototype.cloneMessage = function() {
 
 
 /**
- * required int64 tick = 1;
+ * required sfixed64 tick = 1;
  * @return {number}
  */
 proto.ActionDto.prototype.getTick = function() {
@@ -1320,7 +1333,7 @@ proto.ActionDto.prototype.hasTick = function() {
 
 
 /**
- * required int64 actor = 2;
+ * required sfixed64 actor = 2;
  * @return {number}
  */
 proto.ActionDto.prototype.getActor = function() {
@@ -1379,7 +1392,7 @@ proto.ActionDto.prototype.hasGait = function() {
 
 
 /**
- * optional uint32 animate = 4;
+ * optional fixed32 animate = 4;
  * @return {number}
  */
 proto.ActionDto.prototype.getAnimate = function() {
@@ -1408,7 +1421,7 @@ proto.ActionDto.prototype.hasAnimate = function() {
 
 
 /**
- * optional int64 take = 5;
+ * optional sfixed64 take = 5;
  * @return {number}
  */
 proto.ActionDto.prototype.getTake = function() {
@@ -1433,6 +1446,35 @@ proto.ActionDto.prototype.clearTake = function() {
  */
 proto.ActionDto.prototype.hasTake = function() {
   return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional string say = 6;
+ * @return {string}
+ */
+proto.ActionDto.prototype.getSay = function() {
+  return /** @type {string} */ (!this.hasSay() ? "" : jspb.Message.getField(this, 6));
+};
+
+
+/** @param {string?|undefined} value  */
+proto.ActionDto.prototype.setSay = function(value) {
+  jspb.Message.setOneofField(this, 6, proto.ActionDto.oneofGroups_[0], value);
+};
+
+
+proto.ActionDto.prototype.clearSay = function() {
+  jspb.Message.setOneofField(this, 6, proto.ActionDto.oneofGroups_[0], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return{!boolean}
+ */
+proto.ActionDto.prototype.hasSay = function() {
+  return jspb.Message.getField(this, 6) != null;
 };
 
 
@@ -1550,7 +1592,7 @@ proto.EventDto.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {number} */ (reader.readSfixed64());
       msg.setTick(value);
       break;
     case 2:
@@ -1559,7 +1601,7 @@ proto.EventDto.deserializeBinaryFromReader = function(msg, reader) {
       msg.setSpawn(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {number} */ (reader.readSfixed64());
       msg.setDespawn(value);
       break;
     case 4:
@@ -1607,7 +1649,7 @@ proto.EventDto.prototype.serializeBinaryToWriter = function (writer) {
   var f = undefined;
   f = jspb.Message.getField(this, 1);
   if (f != null) {
-    writer.writeInt64(
+    writer.writeSfixed64(
       1,
       f
     );
@@ -1622,7 +1664,7 @@ proto.EventDto.prototype.serializeBinaryToWriter = function (writer) {
   }
   f = jspb.Message.getField(this, 3);
   if (f != null) {
-    writer.writeInt64(
+    writer.writeSfixed64(
       3,
       f
     );
@@ -1648,7 +1690,7 @@ proto.EventDto.prototype.cloneMessage = function() {
 
 
 /**
- * required int64 tick = 1;
+ * required sfixed64 tick = 1;
  * @return {number}
  */
 proto.EventDto.prototype.getTick = function() {
@@ -1707,7 +1749,7 @@ proto.EventDto.prototype.hasSpawn = function() {
 
 
 /**
- * optional int64 despawn = 3;
+ * optional sfixed64 despawn = 3;
  * @return {number}
  */
 proto.EventDto.prototype.getDespawn = function() {
@@ -1876,7 +1918,7 @@ proto.ClientMsgDto.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint64());
+      var value = /** @type {number} */ (reader.readFixed64());
       msg.setIam(value);
       break;
     case 2:
@@ -1924,7 +1966,7 @@ proto.ClientMsgDto.prototype.serializeBinaryToWriter = function (writer) {
   var f = undefined;
   f = jspb.Message.getField(this, 1);
   if (f != null) {
-    writer.writeUint64(
+    writer.writeFixed64(
       1,
       f
     );
@@ -1950,7 +1992,7 @@ proto.ClientMsgDto.prototype.cloneMessage = function() {
 
 
 /**
- * optional uint64 iam = 1;
+ * optional fixed64 iam = 1;
  * @return {number}
  */
 proto.ClientMsgDto.prototype.getIam = function() {

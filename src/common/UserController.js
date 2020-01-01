@@ -49,7 +49,7 @@ const UserController = ({
       xSpeed = speed;
     }
     if(key.toLowerCase() === "e") {
-      const availableInteraction = interactMap.getInteractObject(userObject.position);
+      const availableInteraction = interactMap.getInteractObject({x: userObject.posX, y: userObject.posy, z: userObject.posZ});
       if(availableInteraction) {
         availableInteraction.onInteract();
       }

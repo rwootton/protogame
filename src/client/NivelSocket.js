@@ -20,13 +20,18 @@ const useSocket = ({onTick, user}) => {
     socket.onmessage = e=>{
       e && e.data && e.data.arrayBuffer().then((blob)=>{
         let offset = 0;
-        while(offset < blob.byteLength) {
+        while (offset < blob.byteLength) {
           const size = new DataView(blob, 0, 2).getUint16(0, false);
           offset += 2;
-          const binary = blob.slice(offset, offset+size);
+          const binary = blob.slice(offset, offset + size);
           offset += size;
-          const message = ServerMsgDto.deserializeBinary(binary).toObject();
-          onTick(message)
+          try {
+            const message = ServerMsgDto.deserializeBinary(binary).toObject();
+            onTick(message)
+          }
+          catch (e) {
+            console.log('bad message', e, { offset, blob, size })
+          }
         }
 
       })
@@ -73,7 +78,6 @@ const useSocket = ({onTick, user}) => {
     action.setTake(id);
     const message = new ClientMsgDto();
     message.setAction(action);
-    console.log('take', message.toObject())
     sendMessage(message);
   }
 

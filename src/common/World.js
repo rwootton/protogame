@@ -17,8 +17,15 @@ import useSocket  from '../client/NivelSocket';
 import LoginInfo from '../ui/LoginInfo';
 import { GidTypeMap } from './constants/GidTypes';
 
-const serverEntityReducer = (state, entity) => {
-  return {...state, [entity.id]: entity};
+const serverEntityReducer = (state, {id, entity}) => {
+  const newState = {...state};
+  if(entity === null) {
+    delete newState[id];
+  }
+  else {
+    newState[id] = entity;
+  }
+  return newState;
 }
 
 const World = ({ height, width, user }) => {
@@ -32,9 +39,12 @@ const World = ({ height, width, user }) => {
 
   const [serverEntities, updateServerEntity] = useReducer(serverEntityReducer, {});
 
-  const onTick = ({entity}) => {
+  const onTick = ({entity, event, ...rest}) => {
     if(entity){
-      updateServerEntity(entity);
+      updateServerEntity({id: entity.id, entity: entity});
+    }
+    if(event && event.action) {
+      updateServerEntity({id: event.action.take, entity: null});
     }
   }
 
