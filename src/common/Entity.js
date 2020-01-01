@@ -18,22 +18,18 @@ const Entity = ({
   let mixer;
   let object;
 
-  useEffect(()=>{
+  useEffect(() => {
     if (scene && entityFile) {
       object = entityFile.scene;
-      if (color || colorMap) {
-        object.traverse((child) => {
-          if (child instanceof Mesh) {
+      object.traverse((child) => {
+        if (child instanceof Mesh) {
+          if (color || (colorMap && colorMap[child.name])) {
             const toonMaterial = new MeshToonMaterial({ color: colorMap && colorMap[child.name] || color });
             child.castShadow = castShadow;
             child.receiveShadow = true;
             child.material = toonMaterial;
           }
-        })
-      }
-      else {
-        object.traverse((child) => {
-          if (child instanceof Mesh) {
+          else {
             const toonMaterial = new MeshToonMaterial();
             child.castShadow = castShadow;
             toonMaterial.skinning = true;
@@ -42,8 +38,8 @@ const Entity = ({
             toonMaterial.images = child.material.images;
             child.material = toonMaterial;
           }
-        })
-      }
+        }
+      })
       if (position) {
         if (position.x) object.position.x = position.x;
         if (position.y) object.position.y = position.y;
