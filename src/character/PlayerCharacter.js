@@ -4,6 +4,7 @@ import useAsset from '../common/useAsset'
 import { playerAnimations } from './constants/AnimationConstants';
 
 const SCALE = 100;
+const CAMERA_OFFSET = 1260;
 let session;
 
 const PlayerCharacter = ({
@@ -91,7 +92,7 @@ const PlayerCharacter = ({
       characterFile.scene.position.z = position.z;
       if(camera) {
         camera.position.x = position.x;
-        camera.position.z = position.z + 1260;
+        camera.position.z = position.z + CAMERA_OFFSET;
       }
       session = Date.now();
       let movePredict;

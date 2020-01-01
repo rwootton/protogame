@@ -5,7 +5,8 @@ import {
   PerspectiveCamera, 
   Clock,
   PCFSoftShadowMap,
-  Color
+  Color,
+  sRGBEncoding
 } from 'three';
 import UserController from './UserController';
 import Light from './Light';
@@ -63,7 +64,7 @@ const World = ({ height, width, user }) => {
     scene.background = new Color('#8C8CD0')
     setScene(scene);
     setCamera(new PerspectiveCamera(45, width / height, 1, 10000));
-    setRenderer(new WebGLRenderer())
+    setRenderer(new WebGLRenderer({ antialias: true }))
     return () => {
       if (mountPoint && mountPoint.current) mountPoint.current.innerHTML = "";
       if (scene) scene.dispose();
@@ -83,6 +84,9 @@ const World = ({ height, width, user }) => {
     if(!renderer) return;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
+    renderer.inputEncoding = sRGBEncoding;
+    renderer.outputEncoding = sRGBEncoding;
+    renderer.setPixelRatio(window.devicePixelRatio);
     mountPoint.current.appendChild(renderer.domElement);
     camera.position.z = 800;
     camera.position.y = 1000;

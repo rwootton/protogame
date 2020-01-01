@@ -4,12 +4,12 @@ import Entity from './Entity';
 
 const Tree = (props) => {
   return <Entity 
-    scale={120}
+    scale={90}
     radius={100}
     file={'assets/tree.glb'}
     castShadow={false}
-    colorMap={{leaves: '#87C771', trunk: '#7A5340'}}
     color={'#87C771'}
+    colorMap={{trunk: '#7A5340'}}
     {...props}
   />;
 }
