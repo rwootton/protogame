@@ -9,10 +9,13 @@ const Entity = ({
   rotation,
   color,
   collisionMap,
+  interactMap,
   scale = 1,
   radius,
   colorMap,
-  castShadow
+  castShadow,
+  collidable,
+  id
 }) => {
   const entityFile = useAsset({file});
   let mixer;
@@ -50,8 +53,11 @@ const Entity = ({
         if (rotation.x) object.rotation.x = rotation.x;
         if (rotation.z) object.rotation.z = rotation.z;
       }
-      if (collisionMap) {
+      if (collisionMap && collidable) {
         collisionMap.add({ x: position.x, z: position.z, radius: radius })
+      }
+      if (interactMap) {
+        interactMap.add({ x: position.x, z: position.z, radius, id })
       }
       if(entityFile.animations && entityFile.animations.length) {
         mixer = new AnimationMixer(object);
@@ -77,6 +83,7 @@ const Entity = ({
       if (entityFile && entityFile.dispose) entityFile.dispose();
       if (object && object.dispose) object.dispose();
       if (collisionMap) collisionMap.remove({ x: position.x, z: position.z, radius: radius })
+      if (interactMap) interactMap.remove({id})
       if(mixer && mixer.dispose) mixer.dispose();
     }
   }, [scene, entityFile])

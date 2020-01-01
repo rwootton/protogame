@@ -78,6 +78,7 @@ const useSocket = ({onTick, user}) => {
     action.setTake(id);
     const message = new ClientMsgDto();
     message.setAction(action);
+    console.log('take', message.toObject())
     sendMessage(message);
   }
 
